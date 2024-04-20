@@ -1,0 +1,21 @@
+.background-container {
+    background-image: url('/background1.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative; /* Required for absolute positioning of pseudo-elements */
+}
+
+.background-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3); /* Semi-transparent black overlay */
+}
+.center-vertically {
+    padding-top: calc(50vh - 15%); /* Adjust as needed */
+    padding-bottom: calc(50vh - 15%); /* Adjust as needed */
+    padding-left: 10%;
+}
