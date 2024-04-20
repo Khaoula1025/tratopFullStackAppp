@@ -59,37 +59,12 @@ class AuthController extends Controller
         return response($response, 201);
     }
 
-    // public function logout(Request $request)
-    // {
-    //     // Attempt to retrieve the authenticated user
-    //     $user = auth()->user();
 
-    //     // Log the user object for debugging purposes
-    //     dd($user);
-
-    //     // Check if a user is authenticated
-    //     if ($user) {
-    //         // Delete all tokens associated with the user
-    //         $user->tokens()->delete();
-
-    //         // Return a successful response indicating the user has been logged out
-    //         return response()->json(['message' => 'Logged out successfully'], 200);
-    //     } else {
-    //         // If no user is authenticated, return an error response
-    //         return response()->json(['message' => 'No authenticated user found'], 401);
-    //     }
-    // }
-    //     public function logout(Request $request)
-    //     {
-    //         $request->user()->currentAccessToken()->delete();
-    //         return response()->json(['message' => 'Logged out']);
-    //     }
-    // }
     public function logout(Request $request)
     {
         /** @var User $user */
         $user = $request->user();
-        dd($user);
+
         // Check if a user is authenticated
         if ($user) {
             // Delete all tokens associated with the user
