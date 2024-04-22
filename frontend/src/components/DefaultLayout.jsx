@@ -3,6 +3,7 @@ import { Outlet, useNavigate, Navigate, Link } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 import axios from "axios"; // Make sure to install axios if you haven't already
 import Travaux from "./Travaux";
+import { DynamicForm } from "./DynamicForm";
 
 export default function DefaultLayout() {
   const { user, token, setUser, setToken } = useStateContext();
@@ -23,7 +24,7 @@ export default function DefaultLayout() {
       setUser(null);
       setToken(null);
 
-      navigate("/login"); // Use navigate to redirect
+      navigate("/"); // Use navigate to redirect
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -54,7 +55,7 @@ export default function DefaultLayout() {
         </header>
         {/* Main content */}
         <main className="p-4">
-          <Travaux />
+        <DynamicForm type="forCada" />
           {/* <Outlet /> */}
         </main>
       </div>

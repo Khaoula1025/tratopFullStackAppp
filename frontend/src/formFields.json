@@ -1,0 +1,270 @@
+{
+  "data": [
+    {
+      "type": [
+        {
+          "name": "Travaux Cadastraux",
+          "image": "/travaux-cadastre.jpg"
+        },
+        {
+          "name": "Travaux Topographiques",
+          "image": "/travaux-topographique.jpg"
+        },
+        {
+          "name": "IFE",
+          "image": "/infra.png"
+        },
+        {
+          "name": "Département de recherche et de capture de la réalité",
+          "image": "/Cadastre.jpg"
+        }
+      ],
+      "fields": [
+        {
+          "commonFields": [
+            {
+              "label": "Nature",
+              "type": "select",
+              "name": "nature",
+              "options": {
+                "forCad": [
+                  "Mise en Concordance",
+                  "Copropriété",
+                  "Morcellement",
+                  "Fusion",
+                  "Morcellement_fusion",
+                  "Lotissement"
+                ],
+                "forTopo": [
+                  "Implatation",
+                  "Etat des Lieux",
+                  "Plan Porcellaire",
+                  "Plan situation",
+                  "Etat des Lieux",
+                  "Plan Côté",
+                  "Plan Bornage"
+                ],
+                "for3D": [
+                  "Plan Façade",
+                  "Plan niveaux",
+                  "Plan coupes verticales",
+                  "Orthophoto",
+                  "BIM",
+                  "Expertise immobilière",
+                  "Plan Porcellaire",
+                  "Plan situation",
+                  "Etat des Lieux",
+                  "Plan Côté",
+                  "Plan Bornage"
+                ],
+                "forIFE": ["no idea"]
+              }
+            },
+            {
+              "label": "Numéro de dossier",
+              "type": "string",
+              "name": "Numéro_de_dossier"
+            },
+            {
+              "label": "Numéro de mission",
+              "type": "string",
+              "name": "Numéro_de_mission"
+            },
+            {
+              "label": "Titre foncier",
+              "type": "string",
+              "name": "titre_foncier"
+            },
+            {
+              "label": "Equipe de terrain",
+              "type": "string",
+              "name": "Equipe_de_terrain"
+            },
+            {
+              "label": "Materiel",
+              "type": "select",
+              "name": "materiel",
+              "options": {
+                "common": ["station Totale", "GPS", "Niveau"],
+                "for3D": ["Drone", "SLAM", "GLS", "MMS"]
+              }
+            },
+            {
+              "label": "Observation",
+              "type": "textarea",
+              "name": "observation"
+            },
+            {
+              "label": "Situation Administrative",
+              "type": "textarea",
+              "name": "situation_administrative"
+            },
+            {
+              "label": "Rattachement",
+              "type": "file",
+              "name": "rattachement"
+            }
+          ],
+          "uniqueFields": [
+            {
+              "forCad": [
+                {
+                  "label": "croquis de levé",
+                  "type": "file",
+                  "name": "croquis_de_levé"
+                },
+                {
+                  "label": "vidage",
+                  "type": "file",
+                  "name": "vidage"
+                },
+                {
+                  "label": "image",
+                  "type": "file",
+                  "name": "image"
+                }
+              ],
+              "forTopo": [
+                {
+                  "label": "Croquis de Terrain",
+                  "type": "file",
+                  "name": "croquis_de_terrain"
+                },
+                {
+                  "label": "vidage",
+                  "type": "file",
+                  "name": "vidage"
+                },
+                {
+                  "label": "image",
+                  "type": "file",
+                  "name": "image"
+                }
+              ],
+              "forIFE": [
+                {
+                  "label": "Croquis",
+                  "type": "file",
+                  "name": "croquis"
+                },
+                {
+                  "label": "vidage",
+                  "type": "file",
+                  "name": "vidage"
+                },
+                {
+                  "label": "image",
+                  "type": "file",
+                  "name": "image"
+                },
+                {
+                  "label": "CIN",
+                  "type": "file",
+                  "name": "cin"
+                },
+                {
+                  "label": "riverain",
+                  "type": "textarea",
+                  "name": "riverain"
+                },
+                {
+                  "label": "Centroïde",
+                  "name": "Centroïde",
+                  "children": [
+                    {
+                      "label": "x",
+                      "type": "text",
+                      "name": "CentroïdeX"
+                    },
+                    {
+                      "label": "y",
+                      "type": "text",
+                      "name": "CentroïdeY"
+                    },
+                    {
+                      "label": "z",
+                      "type": "text",
+                      "name": "CentroïdeZ"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+
+      "materiels": [
+        {
+          "commonFields": ["station Totale", "GPS", "Niveau"],
+          "uniqueFields": [
+            {
+              "for3D": [
+                {
+                  "Drone": [
+                    {
+                      "label": "GCP",
+                      "type": "file",
+                      "name": "gcp"
+                    },
+                    {
+                      "label": "Log",
+                      "type": "file",
+                      "name": "log"
+                    },
+                    {
+                      "label": "photos",
+                      "type": "file",
+                      "name": "photos"
+                    },
+                    {
+                      "label": "Statique",
+                      "type": "file",
+                      "name": "statique"
+                    }
+                  ],
+                  "SLAM": [
+                    {
+                      "label": "Cibles",
+                      "type": "file",
+                      "name": "cibles"
+                    },
+                    {
+                      "label": "lien",
+                      "type": "url",
+                      "name": "lien"
+                    }
+                  ],
+                  "GLS": [
+                    {
+                      "label": "vidage",
+                      "type": "file",
+                      "name": "vidage"
+                    },
+                    {
+                      "label": "Rattachement",
+                      "type": "file",
+                      "name": "rattachement"
+                    }
+                  ],
+                  "MMS": [
+                    {
+                      "label": "vidage",
+                      "type": "file",
+                      "name": "vidage"
+                    },
+                    {
+                      "label": "Rattachement",
+                      "type": "file",
+                      "name": "rattachement"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

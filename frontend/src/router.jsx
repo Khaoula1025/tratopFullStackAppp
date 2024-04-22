@@ -7,7 +7,7 @@ import DefaultLayout from "./components/DefaultLayout";
 import Dashboard from "./pages/Dashboard";
 import LadingPage from "./pages/LadingPage";
 import Travaux from "./components/Travaux";
-
+import {DynamicForm} from'./components/DynamicForm';
 const routes = [
   {
     path: "/",
@@ -20,7 +20,7 @@ const routes = [
       {
         path: "/DefaultLayout",
         element: <DefaultLayout />,
-      },
+      }
     ],
   },
 
@@ -45,6 +45,10 @@ const routes = [
   {
     path: "*",
     element: <NotFound />,
+  },
+  {
+    path: "/dynamicForm",
+    element: <DynamicForm />,
   },
 ];
 

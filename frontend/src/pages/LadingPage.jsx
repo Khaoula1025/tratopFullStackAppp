@@ -1,7 +1,7 @@
 import React from "react";
 import '../App.css'
 import Typewriter from "typewriter-effect";
-import SignUp from "./SignUp";
+import Login from "./Login";
 
 const LadingPage = () => {
     return (
@@ -38,7 +38,7 @@ const LadingPage = () => {
                 </div>
             </div>
             <div className="flex-1">
-                <SignUp />
+                <Login />
             </div>
         </div>
     );
