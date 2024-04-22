@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Outlet, useNavigate, Navigate, Link } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 import axios from "axios"; // Make sure to install axios if you haven't already
+import Travaux from "./Travaux";
 
 export default function DefaultLayout() {
   const { user, token, setUser, setToken } = useStateContext();
@@ -34,21 +35,11 @@ export default function DefaultLayout() {
 
   return (
     <div className="flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 text-white p-8 h-screen flex flex-col items-center">
-        {/* Navigation Links */}
-
-        <Link to="/DataEntry" className="block mb-2">
-          Nouvelle{" "}
-        </Link>
-      </aside>
-
-      {/* Main content */}
       <div className="flex-grow">
         {/* Navbar */}
         <header className="bg-gray-700 text-white p-4 flex justify-between items-center">
-          <Link to="/home" className="text-white">
-            Home
+          <Link to="#" className="text-white">
+            <img src="/logo.png" className="h-24" alt="tra top Logo" />
           </Link>
           <div>
             <Link className="text-white">User information: {user.name}</Link>
@@ -63,7 +54,8 @@ export default function DefaultLayout() {
         </header>
         {/* Main content */}
         <main className="p-4">
-          <Outlet />
+          <Travaux />
+          {/* <Outlet /> */}
         </main>
       </div>
     </div>

@@ -6,7 +6,7 @@ import GestLayout from "./components/GestLayout";
 import DefaultLayout from "./components/DefaultLayout";
 import Dashboard from "./pages/Dashboard";
 import LadingPage from "./pages/LadingPage";
-import DataEntryForm from "./pages/DataEntryForm";
+import Travaux from "./components/Travaux";
 
 const routes = [
   {
@@ -14,16 +14,12 @@ const routes = [
     element: <DefaultLayout />,
     children: [
       {
-        path: "/",
-        element: <Navigate to="/Dashboard" />,
+        path: "/travaux",
+        element: <Travaux />,
       },
       {
-        path: "/DataEntry",
-        element: <DataEntryForm />,
-      },
-      {
-        path: "/Dashboard",
-        element: <Dashboard />,
+        path: "/DefaultLayout",
+        element: <DefaultLayout />,
       },
     ],
   },
