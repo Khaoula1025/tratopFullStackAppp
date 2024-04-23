@@ -1,7 +1,7 @@
 {
   "data": [
     {
-      "type": [
+      "travauxType": [
         {
           "name": "Travaux Cadastraux",
           "image": "/travaux-cadastre.jpg"
@@ -27,7 +27,7 @@
               "type": "select",
               "name": "nature",
               "options": {
-                "forCad": [
+                "forCada": [
                   "Mise en Concordance",
                   "Copropriété",
                   "Morcellement",
@@ -85,7 +85,9 @@
               "type": "select",
               "name": "materiel",
               "options": {
-                "common": ["station Totale", "GPS", "Niveau"],
+                "forCada": ["station Totale", "GPS", "Niveau"],
+                "forTopo": ["station Totale", "GPS", "Niveau"],
+                "forIFE": ["station Totale", "GPS", "Niveau"],
                 "for3D": ["Drone", "SLAM", "GLS", "MMS"]
               }
             },
@@ -107,7 +109,7 @@
           ],
           "uniqueFields": [
             {
-              "forCad": [
+              "forCada": [
                 {
                   "label": "croquis de levé",
                   "type": "file",

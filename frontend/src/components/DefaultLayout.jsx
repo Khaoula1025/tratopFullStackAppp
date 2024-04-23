@@ -55,7 +55,7 @@ export default function DefaultLayout() {
         </header>
         {/* Main content */}
         <main className="p-4">
-        <DynamicForm type="forCada" />
+          <DynamicForm travauType="forCada" />
           {/* <Outlet /> */}
         </main>
       </div>

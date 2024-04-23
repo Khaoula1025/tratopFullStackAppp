@@ -3,9 +3,9 @@ import React from "react";
 function Travaux() {
   return (
     <div className="max-w-xs mx-auto grid gap-6 lg:grid-cols-3 items-start lg:max-w-none">
-      {data.data[0].type.map((travaux, key) => (
+      {data.data[0].travauxType.map((travaux, key) => (
         <div
-          key
+          key={key}
           class="flex flex-col h-full bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden"
         >
           {/* Image */}

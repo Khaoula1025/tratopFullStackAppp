@@ -1,29 +1,28 @@
 import React from "react";
-// Ensure you import formFields correctly
 import formFields from "../formFields.json";
 
-export const DynamicForm = ({ travautype }) => {
-  // Assuming formFields is imported correctly
-  const fieldsObject = formFields.data[0].fields[0];
-  const commonFields = fieldsObject.commonFields || [];
-  const uniqueFields = fieldsObject.uniqueFields || [];
+export const DynamicForm = ({ travauType }) => {
+  const commonFields = formFields.data[0].fields[0].commonFields || [];
 
-  // Define extractOptions function to return the result
+  // Assuming uniqueFields is an array of objects where each object has a travauType key
+  const uniqueFields =
+    formFields.data[0].fields[0].uniqueFields.find(
+      (uf) => uf.travauType === travauType
+    )?.fields || [];
+
+  // Adjusted extractOptions function to correctly handle options
   const extractOptions = (fields, type) => {
     return fields
       .filter(
         (field) =>
           field.type === "select" && field.options && field.options[type]
       )
-      .map((field) => field.options[type])
-      .flat();
+      .flatMap((field) => field.options[type]);
   };
 
   // Assuming you want to use commonOptions and uniqueOptions
-  const commonOptions = extractOptions(commonFields, type);
-  const uniqueOptions = extractOptions(uniqueFields, type);
-  console.log(type);
-
+  const commonOptions = extractOptions(commonFields, travauType);
+  console.log("material", commonFields[0].name === "nature");
   // Render the form
   return (
     <form className="space-y-4">
@@ -41,8 +40,8 @@ export const DynamicForm = ({ travautype }) => {
               name={field.name}
               className="border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             >
-              {Array.isArray(field.options[type]) &&
-                field.options[type].map((option, optionIndex) => (
+              {Array.isArray(field.options[travauType]) &&
+                field.options[travauType].map((option, optionIndex) => (
                   <option key={optionIndex} value={option}>
                     {option}
                   </option>
