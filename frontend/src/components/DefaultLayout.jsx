@@ -1,5 +1,11 @@
-import React, { useContext } from "react";
-import { Outlet, useNavigate, Navigate, Link } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import {
+  Outlet,
+  useNavigate,
+  Navigate,
+  Link,
+  useParams,
+} from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 import axios from "axios"; // Make sure to install axios if you haven't already
 import Travaux from "./Travaux";
@@ -8,6 +14,7 @@ import { DynamicForm } from "./DynamicForm";
 export default function DefaultLayout() {
   const { user, token, setUser, setToken } = useStateContext();
   const navigate = useNavigate(); // Add this line
+  //const { travauType } = useParams();
 
   const logout = async () => {
     try {
@@ -55,8 +62,9 @@ export default function DefaultLayout() {
         </header>
         {/* Main content */}
         <main className="p-4">
-          <DynamicForm travauType="forCada" />
-          {/* <Outlet /> */}
+          {/* <Travaux />
+          <DynamicForm travauType={travauType} /> */}
+          <Outlet />
         </main>
       </div>
     </div>

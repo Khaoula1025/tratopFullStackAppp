@@ -4,19 +4,19 @@
       "travauxType": [
         {
           "name": "Travaux Cadastraux",
-          "image": "/travaux-cadastre.jpg"
+          "image": "/travaux-cadastre.jpg","label":"forCada"
         },
         {
           "name": "Travaux Topographiques",
-          "image": "/travaux-topographique.jpg"
+          "image": "/travaux-topographique.jpg","label":"forTopo"
         },
         {
           "name": "IFE",
-          "image": "/infra.png"
+          "image": "/infra.png","label":"forIFE"
         },
         {
           "name": "Département de recherche et de capture de la réalité",
-          "image": "/Cadastre.jpg"
+          "image": "/Cadastre.jpg","label":"for3D"
         }
       ],
       "fields": [
@@ -197,9 +197,6 @@
       ],
 
       "materiels": [
-        {
-          "commonFields": ["station Totale", "GPS", "Niveau"],
-          "uniqueFields": [
             {
               "for3D": [
                 {
@@ -268,5 +265,3 @@
         }
       ]
     }
-  ]
-}

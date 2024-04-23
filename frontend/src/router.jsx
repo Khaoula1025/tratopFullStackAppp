@@ -7,20 +7,20 @@ import DefaultLayout from "./components/DefaultLayout";
 import Dashboard from "./pages/Dashboard";
 import LadingPage from "./pages/LadingPage";
 import Travaux from "./components/Travaux";
-import {DynamicForm} from'./components/DynamicForm';
+import { DynamicForm } from "./components/DynamicForm";
 const routes = [
   {
     path: "/",
     element: <DefaultLayout />,
     children: [
       {
-        path: "/travaux",
+        path: "/",
         element: <Travaux />,
       },
       {
-        path: "/DefaultLayout",
-        element: <DefaultLayout />,
-      }
+        path: "DynamicForm/:travauType", // Adjusted to correctly capture the travauType parameter
+        element: <DynamicForm />,
+      },
     ],
   },
 
@@ -45,10 +45,6 @@ const routes = [
   {
     path: "*",
     element: <NotFound />,
-  },
-  {
-    path: "/dynamicForm",
-    element: <DynamicForm />,
   },
 ];
 
