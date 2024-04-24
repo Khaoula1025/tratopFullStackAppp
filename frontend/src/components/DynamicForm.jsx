@@ -5,48 +5,24 @@ import { useNavigate, useParams } from "react-router-dom";
 export const DynamicForm = () => {
   //for navigation
   const { travauType } = useParams();
+
   const navigate = useNavigate();
+
   //for Selecting fields
   const commonFields = formFields.data[0].fields[0].commonFields || [];
   const uniqueFields = formFields.data[0].fields[0].uniqueFields || [];
   const uniqueFieldsFiltred = uniqueFields[0][travauType] || [];
+  //for title
+  const titreDeTravaux = formFields.data[0].travauxType.find(
+    (c) => c.label === travauType
+  );
+  const name = titreDeTravaux ? titreDeTravaux.name : "Not found";
 
   //  extracting materials
   const [selectedMaterial, setSelectedMaterial] = useState("");
-  //extracting materials fields
+  //extracting materials fields for 3D
   const [materialFields, setMaterialFields] = useState([]);
-
-  // Function for handling material change
-  // function handleMaterialChanges(e) {
-  //   setSelectedMaterial(e.target.value);
-  //   console.log(selectedMaterial);
-  //   const selectedMaterialsLabels =
-  //     formFields.data[0].materiels[0][travauType][0][selectedMaterial];
-  //   setMaterialFields(selectedMaterialsLabels);
-  // }
-  //
-
-  // useEffect(() => {
-  // //   console.log(materialFields);
-  // // }, [materialFields]); // This effect runs whenever selectedMaterial changes
-  // // extracting materials
-
-  // const selectedMaterial = useRef(""); // Use useRef instead of useState
-  // //extracting materials fields
-  // const materialFields = useRef([]); // Use useRef instead of useState
-
-  // // Function for handling material change
-  // function handleMaterialChanges(e) {
-  //   selectedMaterial.current = e.target.value; // Update the ref directly
-  //   console.log(selectedMaterial.current); // Log the current value directly from the ref
-
-  //   const selectedMaterialsLabels =
-  //     formFields.data[0].materiels[0][travauType].find(
-  //       (material) => material.label === selectedMaterial.current
-  //     )?.fields || [];
-  //   materialFields.current = selectedMaterialsLabels; // Update the ref directly
-  // }
-
+  // function that handle material change
   function handleMaterialChanges(e) {
     const materialValue = e.target.value;
     setSelectedMaterial(materialValue);
@@ -64,10 +40,31 @@ export const DynamicForm = () => {
       return selectedMaterialsLabels;
     });
   }
+  // handle form data state
+  const [formData, setFormData] = useState([]);
+  // handle form data
+  const handleInputChange = (event) => {
+    const { name, type, value, files } = event.target;
 
+    // Handle file inputs
+    if (type === "file") {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: files, // Assuming single file upload
+      }));
+    } else {
+      // Handle text and select inputs
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
+  console.log(formData);
   // Render the form
   return (
     <form className="space-y-4">
+      <h1 className="text-4xl font-bold text-center">{name}</h1>
       {[...commonFields, ...uniqueFieldsFiltred].map((field, index) => (
         <div key={index} className="flex flex-col">
           <label
@@ -81,7 +78,9 @@ export const DynamicForm = () => {
               id={field.name}
               name={field.name}
               className="border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              onChange={handleInputChange} //use handleInputChange
             >
+              <option value="">Selectionner une nature</option>
               {Array.isArray(field.options[travauType]) &&
                 field.options[travauType].map((option, optionIndex) => (
                   <option key={optionIndex} value={option}>
@@ -96,8 +95,14 @@ export const DynamicForm = () => {
                 name={field.name}
                 value={selectedMaterial}
                 className="border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                onChange={handleMaterialChanges}
+                onChange={(event) => {
+                  handleInputChange(event);
+                  handleMaterialChanges(event);
+                }}
+
+                // Use handleInputChange
               >
+                <option value="">Selectionner un materiel</option>
                 {Array.isArray(field.options[travauType]) &&
                   field.options[travauType].map((option, optionIndex) => (
                     <option key={optionIndex} value={option}>
@@ -122,6 +127,7 @@ export const DynamicForm = () => {
                         name={c.name}
                         type={c.type || "text"}
                         className="border  border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        onChange={handleInputChange} // Use handleInputChange
                       />
                     </div>
                   ))}
@@ -133,6 +139,16 @@ export const DynamicForm = () => {
               id={field.name}
               name={field.name}
               className="border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={formData[field.name] || ""}
+              onChange={handleInputChange} // Use handleInputChange
+            />
+          ) : field.type === "file" ? (
+            <input
+              id={field.name}
+              name={field.name}
+              type={field.type || "text"}
+              className="border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              onChange={handleInputChange} // Use handleInputChange
             />
           ) : field.label === "Centroïde" ? (
             field.children.map((child, childIndex) => (
@@ -148,6 +164,8 @@ export const DynamicForm = () => {
                   name={child.name}
                   type={child.type || "text"}
                   className="border w-10 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  value={formData[child.name] || ""}
+                  onChange={handleInputChange} // Use handleInputChange
                 />
               </div>
             ))
@@ -157,34 +175,13 @@ export const DynamicForm = () => {
               name={field.name}
               type={field.type || "text"}
               className="border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={formData[field.name] || ""}
+              onChange={handleInputChange} // Use handleInputChange
             />
           )}
         </div>
       ))}
-      {travauType === "for3D" && (
-        <div>
-          <label
-            htmlFor="material"
-            className="mb-1 text-sm font-medium text-gray-700"
-          >
-            Material
-          </label>
-          <select
-            id="material"
-            name="material"
-            className="border border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            onChange={handleMaterialChanges}
-          >
-            {formFields.data[0].materiels[0][travauType].map(
-              (material, index) => (
-                <option key={index} value={material.label}>
-                  {material.label}
-                </option>
-              )
-            )}
-          </select>
-        </div>
-      )}
+
       <button
         type="submit"
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

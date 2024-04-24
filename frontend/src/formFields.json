@@ -4,19 +4,23 @@
       "travauxType": [
         {
           "name": "Travaux Cadastraux",
-          "image": "/travaux-cadastre.jpg","label":"forCada"
+          "image": "/travaux-cadastre.jpg",
+          "label": "forCada"
         },
         {
           "name": "Travaux Topographiques",
-          "image": "/travaux-topographique.jpg","label":"forTopo"
+          "image": "/travaux-topographique.jpg",
+          "label": "forTopo"
         },
         {
           "name": "IFE",
-          "image": "/infra.png","label":"forIFE"
+          "image": "/infra.png",
+          "label": "forIFE"
         },
         {
           "name": "Département de recherche et de capture de la réalité",
-          "image": "/Cadastre.jpg","label":"for3D"
+          "image": "/Cadastre.jpg",
+          "label": "for3D"
         }
       ],
       "fields": [
@@ -57,7 +61,7 @@
                   "Plan Côté",
                   "Plan Bornage"
                 ],
-                "forIFE": ["no idea"]
+                "forIFE": ["IFE"]
               }
             },
             {
@@ -197,67 +201,65 @@
       ],
 
       "materiels": [
+        {
+          "for3D": [
             {
-              "for3D": [
+              "Drone": [
                 {
-                  "Drone": [
-                    {
-                      "label": "GCP",
-                      "type": "file",
-                      "name": "gcp"
-                    },
-                    {
-                      "label": "Log",
-                      "type": "file",
-                      "name": "log"
-                    },
-                    {
-                      "label": "photos",
-                      "type": "file",
-                      "name": "photos"
-                    },
-                    {
-                      "label": "Statique",
-                      "type": "file",
-                      "name": "statique"
-                    }
-                  ],
-                  "SLAM": [
-                    {
-                      "label": "Cibles",
-                      "type": "file",
-                      "name": "cibles"
-                    },
-                    {
-                      "label": "lien",
-                      "type": "url",
-                      "name": "lien"
-                    }
-                  ],
-                  "GLS": [
-                    {
-                      "label": "vidage",
-                      "type": "file",
-                      "name": "vidage"
-                    },
-                    {
-                      "label": "Rattachement",
-                      "type": "file",
-                      "name": "rattachement"
-                    }
-                  ],
-                  "MMS": [
-                    {
-                      "label": "vidage",
-                      "type": "file",
-                      "name": "vidage"
-                    },
-                    {
-                      "label": "Rattachement",
-                      "type": "file",
-                      "name": "rattachement"
-                    }
-                  ]
+                  "label": "GCP",
+                  "type": "file",
+                  "name": "gcp"
+                },
+                {
+                  "label": "Log",
+                  "type": "file",
+                  "name": "log"
+                },
+                {
+                  "label": "photos",
+                  "type": "file",
+                  "name": "photos"
+                },
+                {
+                  "label": "Statique",
+                  "type": "file",
+                  "name": "statique"
+                }
+              ],
+              "SLAM": [
+                {
+                  "label": "Cibles",
+                  "type": "file",
+                  "name": "cibles"
+                },
+                {
+                  "label": "lien",
+                  "type": "url",
+                  "name": "lien"
+                }
+              ],
+              "GLS": [
+                {
+                  "label": "vidage",
+                  "type": "file",
+                  "name": "vidage"
+                },
+                {
+                  "label": "Rattachement",
+                  "type": "file",
+                  "name": "rattachement"
+                }
+              ],
+              "MMS": [
+                {
+                  "label": "vidage",
+                  "type": "file",
+                  "name": "vidage"
+                },
+                {
+                  "label": "Rattachement",
+                  "type": "file",
+                  "name": "rattachement"
                 }
               ]
             }
@@ -265,3 +267,5 @@
         }
       ]
     }
+  ]
+}

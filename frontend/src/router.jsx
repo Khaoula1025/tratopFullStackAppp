@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import LadingPage from "./pages/LadingPage";
 import Travaux from "./components/Travaux";
 import { DynamicForm } from "./components/DynamicForm";
+import Historique from "./pages/Historique";
 const routes = [
   {
     path: "/",
@@ -16,6 +17,10 @@ const routes = [
       {
         path: "/",
         element: <Travaux />,
+      },
+      {
+        path: "/historique",
+        element: <Historique />,
       },
       {
         path: "DynamicForm/:travauType", // Adjusted to correctly capture the travauType parameter

@@ -6,12 +6,19 @@ import {
   Link,
   useParams,
 } from "react-router-dom";
+import { useState } from "react";
 import { useStateContext } from "../context/ContextProvider";
 import axios from "axios"; // Make sure to install axios if you haven't already
 import Travaux from "./Travaux";
 import { DynamicForm } from "./DynamicForm";
+import SideBar from "./SideBar";
 
 export default function DefaultLayout() {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
   const { user, token, setUser, setToken } = useStateContext();
   const navigate = useNavigate(); // Add this line
   //const { travauType } = useParams();
@@ -45,27 +52,26 @@ export default function DefaultLayout() {
     <div className="flex">
       <div className="flex-grow">
         {/* Navbar */}
-        <header className="bg-gray-700 text-white p-4 flex justify-between items-center">
+        <header className="bg-gray-400 text-white p-4 flex justify-between items-center">
           <Link to="#" className="text-white">
-            <img src="/logo.png" className="h-24" alt="tra top Logo" />
+            <img src="/logo.png" className="h-16" alt="tra top Logo" />
           </Link>
           <div>
             <Link className="text-white">User information: {user.name}</Link>
-            <button
-              type="button"
-              className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-              onClick={logout}
-            >
-              Logout
-            </button>
           </div>
         </header>
-        {/* Main content */}
-        <main className="p-4">
-          {/* <Travaux />
-          <DynamicForm travauType={travauType} /> */}
-          <Outlet />
-        </main>
+        <div className="flex flex-row">
+          {/* Sidebar */}
+          <SideBar
+            onLogout={logout}
+            toggleSidebar={toggleSidebar}
+            isSidebarVisible={isSidebarVisible}
+          />
+          {/* Main content */}
+          <main className="p-4">
+            <Outlet />
+          </main>
+        </div>
       </div>
     </div>
   );

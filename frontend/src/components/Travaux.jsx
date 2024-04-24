@@ -10,11 +10,11 @@ function Travaux() {
   }
 
   return (
-    <div className="max-w-xs mx-auto grid gap-6 lg:grid-cols-3 items-start lg:max-w-none">
+    <div className="max-w-xs mx-auto grid gap-6 lg:grid-cols-3  lg:max-w-none  ">
       {formFields.data[0].travauxType.map((travaux, key) => (
         <div
           key={key}
-          className="flex flex-col h-full bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden"
+          className="flex flex-col h-full bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden justify-center items-center"
           onClick={() => handleType(travaux.label)} // Directly handle click to navigate
         >
           {/* Image */}
