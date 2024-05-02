@@ -18,6 +18,7 @@ function Profil() {
         };
         const response = await axios.get("/api/user-details", config); // Adjust the URL to your backend endpoint
         setUser(response.data.user);
+        console.log(response.data);
         setRecordCount(response.data.recordCounts);
         console.log(recordCounts);
       } catch (error) {

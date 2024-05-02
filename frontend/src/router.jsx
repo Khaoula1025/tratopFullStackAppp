@@ -12,6 +12,7 @@ import Historique from "./pages/Historique";
 import NavbarAndSideBar from "./components/NavbarAndSideBar";
 import UserManagement from "./pages/UserManagement";
 import Profil from "./pages/Profil";
+import MesOperations from "./pages/MesOperations";
 const routes = [
   {
     path: "/",
@@ -24,6 +25,10 @@ const routes = [
       {
         path: "/historique",
         element: <Historique />,
+      },
+      {
+        path: "/mesOperations",
+        element: <MesOperations />,
       },
       {
         path: "/getionDesUtilisateurs",

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../context/ContextProvider";
-
+import { Select, Option } from "@material-tailwind/react";
 export default function Historique() {
   const [operations, setOperations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [type, setType] = useState("");
 
   useEffect(() => {
     const fetchUserOperations = async () => {
@@ -17,10 +18,11 @@ export default function Historique() {
           },
         };
 
-        const response = await axios.get("/api/history", config);
+        const response = await axios.get("/api/history?type=" + type, config);
         // Ensure operations is always an array
-        setOperations(Array.isArray(response.data) ? response.data : []);
-        console.log(response.data);
+        setOperations(
+          Array.isArray(response.data.data) ? response.data.data : []
+        );
       } catch (error) {
         console.error("Failed to fetch user operations:", error);
       } finally {
@@ -28,8 +30,10 @@ export default function Historique() {
       }
     };
 
-    fetchUserOperations();
-  }, []);
+    if (type !== "All" || operations.length === 0) {
+      fetchUserOperations();
+    }
+  }, [type]);
 
   const getTableHeaders = () => {
     if (Array.isArray(operations) && operations.length > 0) {
@@ -42,10 +46,58 @@ export default function Historique() {
   const operationTypes = [
     ...new Set(operations.map((operation) => operation.type)),
   ];
+  console.log(operations);
 
   return (
     <div className="flex flex-col ">
-      <h1 className="text-3xl font-bold mb-5">Your Operations</h1>
+      <h1 className="text-3xl font-bold mb-5 mt-5">Others Operations</h1>
+
+      <div>
+        <form class="max-w-sm ">
+          <label
+            for="countries_multiple"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Select an option
+          </label>
+          <select
+            multiple
+            id="countries_multiple"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            onChange={(e) => {
+              const selectedTypes = Array.from(
+                e.target.selectedOptions,
+                (option) => option.value
+              );
+              if (selectedTypes.length > 0) {
+                // If "All" is selected, set type to "All"
+                if (selectedTypes.includes("forAll")) {
+                  setType("All");
+                } else {
+                  // Otherwise, set the first selected type
+                  setType(selectedTypes[0]);
+                }
+              } else {
+                // Clear the type if no type is selected
+                setType("");
+              }
+            }}
+          >
+            <option selected>Choose a type</option>
+            <option value="travaux_cadastre">travaux cadastre</option>
+            <option value="travaux_topographique">travaux topographique</option>
+            <option value="travaux_ife">travaux IFE</option>
+            <option value="travaux_3d_drone">
+              travaux 3D materiel: drone"
+            </option>
+            <option value="travaux_3d_slam">travaux 3D materiel: slam </option>
+            <option value="travaux_3d_gls">travaux 3D materiel: gls</option>
+            <option value="travaux_3d_mms">travaux 3D materiel: mms</option>
+            <option value="forAll">All</option>
+          </select>
+          <div></div>
+        </form>
+      </div>
       {isLoading ? (
         <p>Loading...</p>
       ) : operations.length === 0 ? (
@@ -53,59 +105,7 @@ export default function Historique() {
       ) : (
         <>
           {operationTypes.map((operationType) => (
-            <div key={operationType} className="w-full">
-              <h2 className="text-3xl font-semibold mb-3  text-gray-900 text-center p-2 rounded">
-                {operationType}
-              </h2>
-              <table className="w-full text-left border-collapse overflow-x-auto">
-                <thead>
-                  <tr>
-                    {getTableHeaders().map((header, index) => (
-                      <th
-                        key={index}
-                        className="px-4 py-2 bg-gray-500 text-white font-semibold"
-                      >
-                        {header}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {operations
-                    .filter((operation) => operation.type === operationType)
-                    .map((operation, index) => (
-                      <tr
-                        key={index}
-                        className={
-                          index % 2 === 0 ? "bg-gray-100" : "bg-gray-300"
-                        }
-                      >
-                        {getTableHeaders().map((header, index) => (
-                          <td key={index} className="border px-4 py-2">
-                            {[
-                              "rattachement",
-                              "croquis_de_levé",
-                              "vidage",
-                              "image",
-                            ].includes(header) ? (
-                              <a
-                                href={`/files/${operation[header]}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-500 hover:text-blue-700"
-                              >
-                                link
-                              </a>
-                            ) : (
-                              operation[header]
-                            )}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+            <div key={operationType} className="w-full"></div>
           ))}
         </>
       )}

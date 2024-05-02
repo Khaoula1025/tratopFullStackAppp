@@ -71,7 +71,6 @@ export const DynamicForm = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    setFormData({});
 
     const formDataToSend = new FormData();
     console.log(token);
@@ -79,10 +78,11 @@ export const DynamicForm = () => {
       if (key === "travauType") {
         return;
       }
+      const value = formData[key] !== undefined ? formData[key] : "";
       if (formData[key] instanceof File) {
         formDataToSend.append(key, formData[key]);
       } else {
-        formDataToSend.append(key, formData[key].toString());
+        formDataToSend.append(key, value.toString());
       }
     });
 
@@ -112,6 +112,8 @@ export const DynamicForm = () => {
         console.log(response.data);
         if (response.data.success) {
           navigate("/");
+          setFormData({});
+
           toast.success("Data saved succesfully.", {
             position: "Bottom left",
             autoClose: 5000,

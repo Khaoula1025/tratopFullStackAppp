@@ -36,10 +36,10 @@ class travauxTopographiqueController extends Controller
             'Equipe_de_terrain' => 'required',
             'materiel' => 'required',
             'situation_administrative' => 'required',
-            'rattachement' => 'required|mimes:jpg,png,jpeg',
-            'croquis_de_terrain' => 'required|mimes:jpg,png,jpeg',
-            'vidage' => 'required|mimes:txt,docx',
-            'image' => 'required|mimes:jpg,png,jpeg',
+            'rattachement' => 'required|mimes:jpg,png,jpeg,pdf',
+            'croquis_de_terrain' => 'required|mimes:jpg,png,jpeg,pdf',
+            'vidage' => 'required|mimes:GT2,txt,docx,jpg,pdf',
+            'image' => 'required|mimes:jpg,png,jpeg,pdf',
 
             // Add validation rules for other fields as necessary
         ]);

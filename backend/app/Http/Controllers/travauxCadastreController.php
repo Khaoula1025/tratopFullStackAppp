@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\travaux_cadastre;
+
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\File;
+
 
 class travauxCadastreController extends Controller
 {
@@ -39,7 +42,10 @@ class travauxCadastreController extends Controller
             'situation_administrative' => 'required',
             'rattachement' => 'required|mimes:jpg,png,jpeg',
             'croquis_de_levé' => 'required|mimes:jpg,png,jpeg',
-            'vidage' => 'required|mimes:txt,docx',
+            'vidage' => [
+                'required',
+                File::types(['txt', 'docx', 'jpeg', 'jpg'])
+            ],
             'image' => 'required|mimes:jpg,png,jpeg',
 
             // Add validation rules for other fields as necessary

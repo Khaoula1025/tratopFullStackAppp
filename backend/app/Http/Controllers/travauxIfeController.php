@@ -37,7 +37,7 @@ class travauxIfeController extends Controller
             'situation_administrative' => 'required',
             'rattachement' => 'required|mimes:jpg,png,jpeg',
             'croquis' => 'required|mimes:jpg,png,jpeg',
-            'vidage' => 'required|mimes:txt,docx',
+            'vidage' => 'required|mimes:txt,docx,jpeg,jpg',
             'image' => 'required|mimes:jpg,png,jpeg',
             'cin' => 'required|mimes:jpg,png,jpeg',
             'riverain' => 'required',

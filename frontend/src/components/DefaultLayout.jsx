@@ -96,6 +96,17 @@ export default function DefaultLayout() {
                 </Link>
               </li>
               <li className="mb-2">
+                <Link to="/mesOperations">
+                  <a
+                    href="#"
+                    className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-lg"
+                  >
+                    <FaInfoCircle className="h-5 w-5" />
+                    <span>Mes Operations</span>
+                  </a>
+                </Link>
+              </li>
+              <li className="mb-2">
                 <Link to="/historique">
                   <a
                     href="#"

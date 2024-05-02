@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import { Button } from "@material-tailwind/react";
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const token = localStorage.getItem("ACCESS_TOKEN");
@@ -49,56 +49,70 @@ const UserManagement = () => {
   };
 
   return (
-    <div class="flex flex-col">
-      <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
-          <div class="overflow-hidden">
-            <h2>Gestion des utilisateurs</h2>
+    <div className="flex flex-col">
+      <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+          <div className="overflow-hidden">
+            <h2 className="text-center text-3xl">Gestion des utilisateurs</h2>
 
-            <table class="min-w-full">
-              <thead class="border-b">
+            <table className="min-w-full border-4 border-collapse border-gray-900 text-center">
+              <thead className="border-b">
                 <tr>
                   <th
                     scope="col"
-                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
                   >
                     id
                   </th>
                   <th
                     scope="col"
-                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
                   >
                     name
                   </th>
                   <th
                     scope="col"
-                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
                   >
                     email
                   </th>
                   <th
                     scope="col"
-                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
                   >
-                    role
+                    Role
+                  </th>
+                  <th
+                    scope="col"
+                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
+                  >
+                    changer role
+                  </th>
+                  <th
+                    scope="col"
+                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
+                  >
+                    Options
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {users.map((user) => (
-                  <tr key={user.id} class="border-b">
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                  <tr key={user.id} className="border-b">
+                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
                       {user.id}
                     </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
                       {user.name}
                     </td>
-                    <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
                       {user.email}
                     </td>
+                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
+                      {user.role}
+                    </td>
 
-                    <td>{user.role}</td>
-                    <td>
+                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900 text-center">
                       <select
                         value={user.role}
                         onChange={(e) => updateRole(user.id, e.target.value)}
@@ -107,6 +121,9 @@ const UserManagement = () => {
                         <option value="admin">Admin</option>
                         {/* Add other roles as needed */}
                       </select>
+                    </td>
+                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
+                      <Button className="text-white bg-red-600">delete</Button>
                     </td>
                   </tr>
                 ))}

@@ -6,37 +6,59 @@ use App\Models\travaux_3d;
 use App\Models\travaux_cadastre;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function getUserHistory()
+    public function getUserHistory($allUsers = false)
     {
-        $userId = auth()->user()->id;
+        // Initialize an empty collection to hold all records
+        $records = collect();
 
-        // Fetch the records for each type of travaux
-        $cadastreHistory = $this->getHistoryByType('travaux_cadastre', $userId);
-        $topographiqueHistory = $this->getHistoryByType('travaux_topographique', $userId);
-        $ifeHistory = $this->getHistoryByType('travaux_ife', $userId);
-        $drone3dHistory = $this->getHistoryByType('travaux_3d_drone', $userId);
-        $slam3dHistory = $this->getHistoryByType('travaux_3d_slam', $userId);
-        $gls3dHistory = $this->getHistoryByType('travaux_3d_gls', $userId);
-        $mms3dHistory = $this->getHistoryByType('travaux_3d_mms', $userId);
+        // Define the models for each type of operation
+        $models = [
+            'travaux_cadastre' => 'App\Models\travaux_cadastre',
+            'travaux_topographique' => 'App\Models\travaux_topographique',
+            'travaux_ife' => 'App\Models\travaux_ife',
+            'travaux_3d_drone' => 'App\Models\travaux_3d_drone',
+            'travaux_3d_slam' => 'App\Models\travaux_3d_slam',
+            'travaux_3d_gls' => 'App\Models\travaux_3d_gls',
+            'travaux_3d_mms' => 'App\Models\travaux_3d_mms',
+        ];
 
+        // Loop through each model and fetch records
+        foreach ($models as $type => $modelClass) {
+            // Dynamically load the model class
+            $model = new $modelClass;
 
-        // Combine all the records into a single collection
-        $combinedHistory = $cadastreHistory->concat($topographiqueHistory)
-            ->concat($ifeHistory)
-            ->concat($drone3dHistory)
-            ->concat($slam3dHistory)
-            ->concat($gls3dHistory)
-            ->concat($mms3dHistory);
+            // If $allUsers is true, fetch records for all users; otherwise, fetch for the current user
+            if ($allUsers) {
+                // Fetch records for all users across all models
+                $records = $records->concat($model::all());
+            } else {
+                // Fetch records for the current user
+                $records = $records->concat($model::where('id_user', auth()->user()->id)->get());
+            }
 
-        // Combine the related records for each type of 3D travaux
-        if ($combinedHistory->isEmpty()) {
-            return response()->json(['message' => 'No operations found.'], 200);
+            // Add the type to each record
+            $records = $records->map(function ($record) use ($type) {
+                $record->type = $type; // Correctly assign the type based on the model
+                return $record;
+            });
         }
 
-        return response()->json($combinedHistory);
+        // Combine the related records for each type of 3D travaux
+        if ($records->isEmpty()) {
+            return response()->json([
+                'message' => 'No operations found.',
+                'data' => []
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Operations fetched successfully.',
+            'data' => $records
+        ]);
     }
 
     private function getHistoryByType($type, $userId)
@@ -57,5 +79,50 @@ class UserController extends Controller
     {
         $user->update(['role' => $request->role]);
         return back()->with('success', 'Role updated successfully');
+    }
+    public function getUserDetails()
+    {
+        // Check if the user is authenticated
+        if (!Auth::check()) {
+            // If not authenticated, return an error
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        // Fetch the user's details
+        $user = Auth::user();
+
+        // Prepare the user details to be returned
+        $userDetails = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+        ];
+
+        // Define the models for each type of operation
+        $models = [
+            'travaux_cadastre' => 'App\Models\travaux_cadastre',
+            'travaux_topographique' => 'App\Models\travaux_topographique',
+            'travaux_ife' => 'App\Models\travaux_ife',
+            'travaux_3d_drone' => 'App\Models\travaux_3d_drone',
+            'travaux_3d_slam' => 'App\Models\travaux_3d_slam',
+            'travaux_3d_gls' => 'App\Models\travaux_3d_gls',
+            'travaux_3d_mms' => 'App\Models\travaux_3d_mms',
+        ];
+
+        // Initialize an empty array to hold the counts
+        $recordCounts = [];
+
+        // Loop through each model and fetch records, then count them
+        foreach ($models as $type => $model) {
+            $records = $model::where('id_user', $user->id)->get();
+            $count = $records->count();
+            $recordCounts[$type] = $count;
+        }
+
+        // Return the user details along with the counts of each record type
+        return response()->json([
+            'user' => $userDetails,
+            'recordCounts' => $recordCounts,
+        ]);
     }
 }
