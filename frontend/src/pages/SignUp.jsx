@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useStateContext } from "../context/ContextProvider";
+import { toast } from "react-toastify";
 export default function SignUp() {
   const { setUser, setToken } = useStateContext();
   const [errors, setErrors] = useState(null);
@@ -37,6 +38,15 @@ export default function SignUp() {
         setUser(response.data.user);
         setToken(response.data.token);
         navigate("/login");
+        toast.success("Registration successful .", {
+          position: "Bottom left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       } else {
         console.error("Unexpected response structure:", response);
       }
@@ -48,13 +58,14 @@ export default function SignUp() {
       // Handle registration failure, e.g., show error message
       if (error.response && error.response.data) {
         setErrors(error.response.data.errors);
+        console.log(error.response.data.errors);
       }
     }
   }
 
   return (
     <div>
-      <section className="bg-gray-400  dark:bg-gray-900">
+      <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -62,13 +73,6 @@ export default function SignUp() {
                 Créer ton compte
               </h1>
               {/* form for sign up  */}
-              {errors && (
-                <div className="">
-                  {Object.keys(errors).map((key) => (
-                    <p key={key}>{errors[key][0]}</p>
-                  ))}
-                </div>
-              )}
               <form className="space-y-4 md:space-y-6" onSubmit={onSubmit}>
                 <div>
                   <label
@@ -86,7 +90,14 @@ export default function SignUp() {
                     placeholder=""
                     required=""
                   />
+                  <div>
+                    {" "}
+                    {errors && (
+                      <p className="text-sm text-red-500">{errors.name}</p>
+                    )}
+                  </div>
                 </div>
+
                 <div>
                   <label
                     htmlFor="prenom"
@@ -103,6 +114,12 @@ export default function SignUp() {
                     placeholder=""
                     required=""
                   />
+                  <div>
+                    {" "}
+                    {errors && (
+                      <p className="text-sm text-red-500">{errors.name}</p>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -121,6 +138,12 @@ export default function SignUp() {
                     placeholder="name@company.com"
                     required=""
                   />
+                  <div>
+                    {" "}
+                    {errors && (
+                      <p className="text-sm text-red-500">{errors.email}</p>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -156,6 +179,12 @@ export default function SignUp() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required=""
                   />
+                  <div>
+                    {" "}
+                    {errors && (
+                      <p className="text-sm text-red-500">{errors.password}</p>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-start"></div>
                 <button

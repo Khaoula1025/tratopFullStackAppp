@@ -18,7 +18,7 @@ import {
 import { Link } from "react-router-dom";
 export default function Sidebar({ onLogout, toggleSidebar, isSidebarVisible }) {
   return (
-    <div>
+    <div className="bg-gray-400">
       {/* Toggle Button */}
       <button onClick={toggleSidebar} className="md:hidden">
         {/* Hamburger Icon */}
@@ -38,7 +38,7 @@ export default function Sidebar({ onLogout, toggleSidebar, isSidebarVisible }) {
       </button>
 
       <Card
-        className={`h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 ${
+        className={` bg-gray-400 h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4  shadow-blue-gray-900/5 ${
           isSidebarVisible ? "block" : "hidden"
         } md:block`}
       >

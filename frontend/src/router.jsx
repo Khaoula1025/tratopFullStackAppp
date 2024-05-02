@@ -9,6 +9,9 @@ import LadingPage from "./pages/LadingPage";
 import Travaux from "./components/Travaux";
 import { DynamicForm } from "./components/DynamicForm";
 import Historique from "./pages/Historique";
+import NavbarAndSideBar from "./components/NavbarAndSideBar";
+import UserManagement from "./pages/UserManagement";
+import Profil from "./pages/Profil";
 const routes = [
   {
     path: "/",
@@ -21,6 +24,14 @@ const routes = [
       {
         path: "/historique",
         element: <Historique />,
+      },
+      {
+        path: "/getionDesUtilisateurs",
+        element: <UserManagement />,
+      },
+      {
+        path: "/profil",
+        element: <Profil />,
       },
       {
         path: "DynamicForm/:travauType", // Adjusted to correctly capture the travauType parameter

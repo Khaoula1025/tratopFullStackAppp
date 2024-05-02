@@ -46,4 +46,32 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function travauxTopographiques()
+    {
+        return $this->hasMany(travaux_topographique::class, 'id_user');
+    }
+    public function travauxCadastres()
+    {
+        return $this->hasMany(travaux_cadastre::class, 'id_user');
+    }
+    public function travauxifes()
+    {
+        return $this->hasMany(travaux_ife::class, 'id_user');
+    }
+    public function travaux3dgls()
+    {
+        return $this->hasMany(travaux_3d_gls::class, 'id_user');
+    }
+    public function travaux3dDrone()
+    {
+        return $this->hasMany(travaux_3d_drone::class, 'id_user');
+    }
+    public function travaux3dmms()
+    {
+        return $this->hasMany(travaux_3d_mms::class, 'id_user');
+    }
+    public function travaux3dSlam()
+    {
+        return $this->hasMany(travaux_3d_slam::class, 'id_user');
+    }
 }

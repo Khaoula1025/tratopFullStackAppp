@@ -108,7 +108,8 @@
             {
               "label": "Rattachement",
               "type": "file",
-              "name": "rattachement"
+              "name": "rattachement",
+              "extension":"Formats acceptés: .png , jpg , jpeg"
             }
           ],
           "uniqueFields": [
@@ -117,29 +118,34 @@
                 {
                   "label": "croquis de levé",
                   "type": "file",
-                  "name": "croquis_de_levé"
+                  "name": "croquis_de_levé",
+                  "extension":"Formats acceptés: .png , jpg , jpeg"
                 },
                 {
                   "label": "vidage",
                   "type": "file",
-                  "name": "vidage"
+                  "name": "vidage",
+                  "extension":"Formats acceptés: .txt , .docx"
                 },
                 {
                   "label": "image",
                   "type": "file",
-                  "name": "image"
+                  "name": "image",
+                  "extension":"Formats acceptés: .png , jpg , jpeg"
                 }
               ],
               "forTopo": [
                 {
                   "label": "Croquis de Terrain",
                   "type": "file",
-                  "name": "croquis_de_terrain"
+                  "name": "croquis_de_terrain",
+                  "extension":"Formats acceptés: .png , jpg , jpeg"
                 },
                 {
                   "label": "vidage",
                   "type": "file",
-                  "name": "vidage"
+                  "name": "vidage",
+                  "extension":"Formats acceptés:.txt , .docx"
                 },
                 {
                   "label": "image",
@@ -151,22 +157,26 @@
                 {
                   "label": "Croquis",
                   "type": "file",
-                  "name": "croquis"
+                  "name": "croquis",
+                  "extension":"Formats acceptés: .png , jpg , jpeg"
                 },
                 {
                   "label": "vidage",
                   "type": "file",
-                  "name": "vidage"
+                  "name": "vidage",
+                  "extension":"Formats acceptés:.txt , .docx"
                 },
                 {
                   "label": "image",
                   "type": "file",
-                  "name": "image"
+                  "name": "image",
+                  "extension":"Formats acceptés: .png , jpg , jpeg"
                 },
                 {
                   "label": "CIN",
                   "type": "file",
-                  "name": "cin"
+                  "name": "cin",
+                  "extension":"Formats acceptés: .png , jpg , jpeg"
                 },
                 {
                   "label": "riverain",
@@ -208,29 +218,34 @@
                 {
                   "label": "GCP",
                   "type": "file",
-                  "name": "gcp"
+                  "name": "gcp",
+                  "extension":"Formats acceptés: .txt"
                 },
                 {
                   "label": "Log",
                   "type": "file",
-                  "name": "log"
+                  "name": "log",
+                  "extension":"Formats acceptés: .bin"
                 },
                 {
                   "label": "photos",
                   "type": "file",
-                  "name": "photos"
+                  "name": "photos",
+                  "extension":"Formats acceptés: .zip"
                 },
                 {
                   "label": "Statique",
                   "type": "file",
-                  "name": "statique"
+                  "name": "statique",
+                  "extension":"Formats acceptés: .txt, .zip"
                 }
               ],
               "SLAM": [
                 {
                   "label": "Cibles",
                   "type": "file",
-                  "name": "cibles"
+                  "name": "cibles",
+                  "extension":"Formats acceptés: .txt"
                 },
                 {
                   "label": "lien",
@@ -242,24 +257,17 @@
                 {
                   "label": "vidage",
                   "type": "file",
-                  "name": "vidage"
-                },
-                {
-                  "label": "Rattachement",
-                  "type": "file",
-                  "name": "rattachement"
+                  "name": "vidage",
+                  "extension":"Formats acceptés: .zip, .rar"
                 }
               ],
               "MMS": [
                 {
                   "label": "vidage",
                   "type": "file",
-                  "name": "vidage"
-                },
-                {
-                  "label": "Rattachement",
-                  "type": "file",
-                  "name": "rattachement"
+                  "name": "vidage",
+                  "extension":"Formats acceptés: .zip"
+
                 }
               ]
             }
