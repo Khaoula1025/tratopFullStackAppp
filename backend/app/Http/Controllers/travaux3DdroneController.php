@@ -36,7 +36,7 @@ class travaux3DdroneController extends Controller
             'materiel' => 'required',
             'situation_administrative' => 'required',
             'rattachement' => 'required|mimes:jpg,png,jpeg',
-            'gcp' => 'required|mimes:txt',
+            'gcp' => 'required|mimes:txt,docx,doc',
             'log' => 'required|mimes:bin,zip,rar',
             'photos' => 'required|mimes:zip,rar,pdf',
             'statique' => 'required|mimes:txt,zip,rar,doc,docx',

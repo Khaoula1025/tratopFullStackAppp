@@ -1,52 +1,14 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 
-export default function Historique() {
+export default function OthersHistory() {
   const [operations, setOperations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [type, setType] = useState("");
-
-  useEffect(() => {
-    const fetchUserOperations = async () => {
-      setIsLoading(true);
-      try {
-        const token = localStorage.getItem("ACCESS_TOKEN");
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
-        const response = await axios.get("/api/history?type=" + type, config);
-        // Ensure operations is always an array
-        setOperations(
-          Array.isArray(response.data.data) ? response.data.data : []
-        );
-      } catch (error) {
-        console.error("Failed to fetch user operations:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (type !== "All" || operations.length === 0) {
-      fetchUserOperations();
-    }
-  }, [type]);
-
-  const getTableHeaders = () => {
-    if (Array.isArray(operations) && operations.length > 0) {
-      return Object.keys(operations[0]);
-    }
-    return [];
-  };
-
   // Identify unique operation types
   const operationTypes = [
     ...new Set(operations.map((operation) => operation.type)),
   ];
   console.log(operations);
-
   return (
     <div className="flex flex-col ">
       <h1 className="text-3xl font-bold mb-5 mt-5">Others Operations</h1>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\travaux_cadastre;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File;
 
 
@@ -44,12 +45,16 @@ class travauxCadastreController extends Controller
             'croquis_de_levé' => 'required|mimes:jpg,png,jpeg',
             'vidage' => [
                 'required',
-                File::types(['txt', 'docx', 'jpeg', 'jpg'])
+                'file', // Corrected validation rule
+                'mimes:txt,docx,jpeg,jpg' // Corrected validation rule
             ],
             'image' => 'required|mimes:jpg,png,jpeg',
-
-            // Add validation rules for other fields as necessary
         ]);
+
+        $image_url = $request->file('image')->store('images');
+        $rattachement_url = $request->file('rattachement')->store('rattachement');
+        $croquis_de_levé_url = $request->file('croquis_de_levé')->store('croquis_de_levé');
+        $vidage_url = $request->file('vidage')->store('vidage');
 
         $travauxCadastre = new travaux_cadastre([
             'nature' => $request->get('nature'),
@@ -60,18 +65,19 @@ class travauxCadastreController extends Controller
             'materiel' => $request->get('materiel'),
             'observation' => $request->get('observation'),
             'situation_administrative' => $request->get('situation_administrative'),
-            'rattachement' => $request->file('rattachement')->store('rattachements'),
-            'croquis_de_levé' => $request->file('croquis_de_levé')->store('croquis_de_levé'),
-            'vidage' => $request->file('vidage')->store('vidages'),
-            'image' => $request->file('image')->store('images'),
-            // Assign other fields as necessary
+            'rattachement' => Storage::url($rattachement_url),
+            'croquis_de_levé' => Storage::url($croquis_de_levé_url),
+            'vidage' => Storage::url($vidage_url),
+            'image' => Storage::url($image_url),
             'id_user' => auth()->user()->id, // Assuming you want to associate the current user
         ]);
 
         $travauxCadastre->save();
+
         // Return a JSON response indicating success
         return response()->json(['success' => true, 'message' => 'Data saved successfully']);
     }
+
     /**
      * Display the specified resource.
      */

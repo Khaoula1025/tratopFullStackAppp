@@ -94,7 +94,7 @@ export default function MesOperations() {
                               "image",
                             ].includes(header) ? (
                               <a
-                                href={`/files/${operation[header]}`}
+                                href={`${operation[header]}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-blue-500 hover:text-blue-700"
