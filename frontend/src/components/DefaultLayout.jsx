@@ -13,7 +13,13 @@ import Travaux from "./Travaux";
 import { DynamicForm } from "./DynamicForm";
 import SideBar from "./SideBar";
 import { PowerIcon } from "@heroicons/react/24/solid";
-import { FaHome, FaInfoCircle, FaUser, FaEnvelope } from "react-icons/fa"; // Import icons
+import {
+  FaHome,
+  FaInfoCircle,
+  FaUser,
+  FaEnvelope,
+  FaHistory,
+} from "react-icons/fa"; // Import icons
 import axiosClient from "../axios-client";
 
 export default function DefaultLayout() {
@@ -101,7 +107,8 @@ export default function DefaultLayout() {
                     href="#"
                     className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-lg"
                   >
-                    <FaInfoCircle className="h-5 w-5" />
+                    <FaHistory className="h-5 w-5" />
+
                     <span>Mes Operations</span>
                   </a>
                 </Link>
@@ -113,6 +120,7 @@ export default function DefaultLayout() {
                     className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded-lg"
                   >
                     <FaInfoCircle className="h-5 w-5" />
+
                     <span>Historique</span>
                   </a>
                 </Link>

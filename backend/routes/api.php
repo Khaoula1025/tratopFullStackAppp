@@ -24,8 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/forIFE', [travauxIfeController::class, 'store']);
     Route::post('/for3D', [travaux3DController::class, 'handleRequest']);
     Route::get('/history', [UserController::class, 'getUserHistory']);
+    Route::get('/history/all', [UserController::class, 'getAllUsersHistory']);
     Route::get('/files/{filePath}', [FileController::class, 'show']);
     Route::get('/users', [UserController::class, 'index']);
+    Route::delete('/user/{userId}', [UserController::class, 'deleteUser']);
     Route::get('/user-details', [UserController::class, 'getUserDetails']);
     Route::put('/user/{user}/updateRole', [UserController::class, 'updateRole']);
     Route::get('/user', function (Request $request) {

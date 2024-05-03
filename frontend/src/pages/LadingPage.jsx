@@ -21,7 +21,7 @@ const LadingPage = () => {
         </Link>
 
         <div className="flex flex-col justify-center items-center center-vertically">
-          <div className="lobster-regular text-4xl">
+          <div className="lobster-regular text-4xl flex-wrap">
             <Typewriter
               onInit={(typewriter) => {
                 typewriter

@@ -17,11 +17,27 @@ export default function Historique() {
           },
         };
 
-        const response = await axios.get("/api/history?type=" + type, config);
-        // Ensure operations is always an array
-        setOperations(
-          Array.isArray(response.data.data) ? response.data.data : []
-        );
+        let url = "/api/history";
+        if (type === "All") {
+          url += "?all=true"; // Adjusted based on backend support
+        } else {
+          url += "?type=" + type;
+        }
+
+        const response = await axios.get(url, config);
+        console.log(response.data);
+        // Check for backend success message
+        if (response.data.message === "Operations fetched successfully.") {
+          setOperations(
+            Array.isArray(response.data.data) ? response.data.data : []
+          );
+        } else {
+          console.error(
+            "Backend failed to fetch operations:",
+            response.data.message
+          );
+          // Handle error, e.g., show an error message to the user
+        }
       } catch (error) {
         console.error("Failed to fetch user operations:", error);
       } finally {
@@ -50,53 +66,37 @@ export default function Historique() {
   return (
     <div className="flex flex-col ">
       <h1 className="text-3xl font-bold mb-5 mt-5">Others Operations</h1>
-
-      <div>
-        <form class="max-w-sm ">
-          <label
-            for="countries_multiple"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      {/* search bar */}
+      <form class="flex flex-col md:flex-row gap-3">
+        <div class="flex">
+          <input
+            type="text"
+            placeholder="....."
+            class="w-full md:w-80 px-3 h-10 rounded-l border-2 border-gray-500 focus:outline-none focus:border-gray-500"
+          />
+          <button
+            type="submit"
+            class="bg-gray-500 text-white rounded-r px-2 md:px-3 py-0 md:py-1"
           >
-            Select an option
-          </label>
-          <select
-            multiple
-            id="countries_multiple"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            onChange={(e) => {
-              const selectedTypes = Array.from(
-                e.target.selectedOptions,
-                (option) => option.value
-              );
-              if (selectedTypes.length > 0) {
-                // If "All" is selected, set type to "All"
-                if (selectedTypes.includes("forAll")) {
-                  setType("All");
-                } else {
-                  // Otherwise, set the first selected type
-                  setType(selectedTypes[0]);
-                }
-              } else {
-                // Clear the type if no type is selected
-                setType("");
-              }
-            }}
-          >
-            <option selected>Choose a type</option>
-            <option value="travaux_cadastre">travaux cadastre</option>
-            <option value="travaux_topographique">travaux topographique</option>
-            <option value="travaux_ife">travaux IFE</option>
-            <option value="travaux_3d_drone">
-              travaux 3D materiel: drone"
-            </option>
-            <option value="travaux_3d_slam">travaux 3D materiel: slam </option>
-            <option value="travaux_3d_gls">travaux 3D materiel: gls</option>
-            <option value="travaux_3d_mms">travaux 3D materiel: mms</option>
-            <option value="forAll">All</option>
-          </select>
-          <div></div>
-        </form>
-      </div>
+            rechercher
+          </button>
+        </div>
+        <select
+          id="pricingType"
+          name="pricingType"
+          class=" h-10 border-2 border-gray-500 focus:outline-none focus:borde-gray-500 text-gray-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
+        >
+          <option value="forAll">All</option>
+          <option value="travaux_cadastre">travaux cadastre</option>
+          <option value="travaux_topographique">travaux topographique</option>
+          <option value="travaux_ife">travaux IFE</option>
+          <option value="travaux_3d_drone">travaux 3D materiel: drone"</option>
+          <option value="travaux_3d_slam">travaux 3D materiel: slam </option>
+          <option value="travaux_3d_gls">travaux 3D materiel: gls</option>
+          <option value="travaux_3d_mms">travaux 3D materiel: mms</option>
+        </select>
+      </form>
+      <div></div>
       {isLoading ? (
         <p>Loading...</p>
       ) : operations.length === 0 ? (

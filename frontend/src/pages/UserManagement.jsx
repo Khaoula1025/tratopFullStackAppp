@@ -47,6 +47,25 @@ const UserManagement = () => {
         console.error("Error updating user role:", error);
       });
   };
+  const deleteUser = (userId) => {
+    // Send a DELETE request to the backend to delete the user
+    axios
+      .delete(`/api/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        // Handle success (e.g., update the UI, show a success message)
+        console.log("User deleted successfully");
+        // Optionally, update the users state to remove the deleted user
+        setUsers(users.filter((user) => user.id !== userId));
+      })
+      .catch((error) => {
+        // Handle error (e.g., show an error message)
+        console.error("Error deleting user:", error);
+      });
+  };
 
   return (
     <div className="flex flex-col">
@@ -123,7 +142,12 @@ const UserManagement = () => {
                       </select>
                     </td>
                     <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
-                      <Button className="text-white bg-red-600">delete</Button>
+                      <Button
+                        className="text-white bg-red-600"
+                        onClick={() => deleteUser(user.id)}
+                      >
+                        delete
+                      </Button>
                     </td>
                   </tr>
                 ))}

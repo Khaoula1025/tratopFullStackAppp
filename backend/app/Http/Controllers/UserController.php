@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\travaux_3d;
-use App\Models\travaux_cadastre;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,12 +37,41 @@ class UserController extends Controller
                 // Fetch records for the current user
                 $records = $records->concat($this->getHistoryByType($type, auth()->user()->id));
             }
+        }
 
-            // // Add the type to each record
-            // $records = $records->map(function ($record) use ($type) {
-            //     $record->type = $type; // Correctly assign the type based on the model
-            //     return $record;
-            // });
+        // Combine the related records for each type of 3D travaux
+        if ($records->isEmpty()) {
+            return response()->json([
+                'message' => 'No operations found.',
+                'data' => []
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Operations fetched successfully.',
+            'data' => $records
+        ]);
+    }
+    public function getAllUsersHistory($allUsers = true)
+    {
+
+        // Initialize an empty collection to hold all records
+        $records = collect();
+
+        // Loop through each model and fetch records
+        foreach ($this->models as $type => $modelClass) {
+            // Dynamically load the model class
+            $model = new $modelClass;
+
+            // Fetch records for all users across all models
+            // Passing null as the second argument to getHistoryByType indicates fetching records for all users
+            if ($allUsers) {
+                // Fetch records for all users across all models
+                $records = $records->concat($this->getHistoryByType($type, null));
+            } else {
+                // Fetch records for the current user
+                $records = $records->concat($this->getHistoryByType($type, auth()->user()->id));
+            }
         }
 
         // Combine the related records for each type of 3D travaux
@@ -61,14 +88,30 @@ class UserController extends Controller
         ]);
     }
 
+
+
     private function getHistoryByType($type, $userId)
     {
         $model = "App\\Models\\" . ucfirst($type);
-        return $model::where('id_user', $userId)->get()->map(function ($operation) use ($type) {
-            $operation->type = $type; // Add a 'type' property to each operation
-            return $operation;
-        });
+
+        if ($userId === null) {
+            $records = $model::all()->map(function ($operation) use ($type) {
+                $operation->type = $type;
+
+                return $operation;
+            });
+        } else {
+            $records = $model::where('id_user', $userId)->get()->map(function ($operation) use ($type) {
+                $operation->type = $type;
+                return $operation;
+            });
+        }
+
+
+        return $records;
     }
+
+
 
     public function index()
     {
@@ -80,6 +123,37 @@ class UserController extends Controller
         $user->update(['role' => $request->role]);
         return back()->with('success', 'Role updated successfully');
     }
+
+    public function deleteUser(Request $request, User $user)
+    {
+        // Retrieve the authenticated user
+        $authenticatedUser = Auth::user();
+
+        // Check if the authenticated user has the 'admin' role
+        if ($authenticatedUser->role !== 'admin') {
+            // If not, return an error response
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // If the authenticated user is an admin, proceed with deletion
+        // Delete related records
+        $user->travauxTopographiques()->forceDelete();
+        $user->travauxCadastres()->forceDelete();
+        $user->travauxifes()->forceDelete();
+        $user->travaux3dDrone()->forceDelete();
+        $user->travaux3dSlam()->forceDelete();
+        $user->travaux3dmms()->forceDelete();
+        $user->travaux3dgls()->forceDelete();
+
+        // Perform any other necessary deletions for related models
+
+        // If using soft deletes, you might need to force delete
+        $user->forceDelete();
+
+        // Return a success response
+        return response()->json(['message' => 'User deleted successfully'], 200);
+    }
+
     public function getUserDetails()
     {
         // Check if the user is authenticated
