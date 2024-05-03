@@ -15,7 +15,7 @@ const UserManagement = () => {
     axios
       .get("/api/users", config)
       .then((response) => {
-        console.log(response.data); // Log the response data
+        console.log(response.data);
         setUsers(response.data);
       })
       .catch((error) => {
