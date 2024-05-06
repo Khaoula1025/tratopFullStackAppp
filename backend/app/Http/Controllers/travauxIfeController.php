@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\travaux_ife;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Storage;
 
 class travauxIfeController extends Controller
 {
@@ -28,22 +31,41 @@ class travauxIfeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::validate($request->all(), [
             'nature' => 'required',
             'Numéro_de_dossier' => 'required',
             'Numéro_de_mission' => 'required',
             'Equipe_de_terrain' => 'required',
             'materiel' => 'required',
             'situation_administrative' => 'required',
-            'rattachement' => 'required|mimes:jpg,png,jpeg',
-            'croquis' => 'required|mimes:jpg,png,jpeg',
-            'vidage' => 'required|mimes:txt,docx,jpeg,jpg',
-            'image' => 'required|mimes:jpg,png,jpeg',
-            'cin' => 'required|mimes:jpg,png,jpeg',
+            'rattachement' =>  [
+                'required',
+                File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
+            'croquis' =>  [
+                'required',
+                File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
+            'vidage' =>  [
+                'required', File::types(['pdf', 'zip', 'rar', 'txt', 'docx', 'doc'])
+            ],
+            'image' => [
+                'required',
+                File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
+            'cin' => [
+                'required',
+                File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
             'riverain' => 'required',
             'Centroïde' => 'required',
-            // Add validation rules for other fields as necessary
         ]);
+        $rattachement_url = $request->file('rattachement')->store('rattachement');
+        $croquis_url = $request->file('croquis')->store('croquis');
+        $vidage_url = $request->file('vidage')->store('vidage');
+        $image_url = $request->file('image')->store('image');
+        $cin_url = $request->file('cin')->store('cin');
+
 
         $travauxIfe = new travaux_ife([
             'nature' => $request->get('nature'),
@@ -54,11 +76,11 @@ class travauxIfeController extends Controller
             'materiel' => $request->get('materiel'),
             'observation' => $request->get('observation'),
             'situation_administrative' => $request->get('situation_administrative'),
-            'rattachement' => $request->file('rattachement')->store('rattachements'),
-            'croquis' => $request->file('croquis')->store('croquis'),
-            'vidage' => $request->file('vidage')->store('vidages'),
-            'image' => $request->file('image')->store('images'),
-            'cin' => $request->file('cin')->store('cin'),
+            'rattachement' => Storage::url($rattachement_url),
+            'croquis' => Storage::url($croquis_url),
+            'vidage' => Storage::url($vidage_url),
+            'image' => Storage::url($image_url),
+            'cin' => Storage::url($cin_url),
             'riverain' => $request->get('riverain'),
             'Centroïde' => $request->get('Centroïde'),
 

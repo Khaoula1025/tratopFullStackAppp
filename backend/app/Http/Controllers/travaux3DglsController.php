@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\travaux_3d_gls;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
 
 class travaux3DglsController extends Controller
 {
@@ -28,7 +31,7 @@ class travaux3DglsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::validate($request->all(), [
             'nature' => 'required',
             'Numéro_de_dossier' => 'required',
             'Numéro_de_mission' => 'required',
@@ -36,12 +39,17 @@ class travaux3DglsController extends Controller
             'Equipe_de_terrain' => 'required',
             'materiel' => 'required',
             'situation_administrative' => 'required',
-            'rattachement' => 'required|mimes:jpg,png,jpeg',
-            'vidage' => 'required|mimes:zip,rar',
-
-
-            // Add validation rules for other fields as necessary
+            'rattachement' =>  [
+                'required',
+                File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
+            'vidage' => [
+                'required', File::types(['pdf', 'zip', 'rar', 'txt', 'docx', 'doc'])
+            ],
         ]);
+        $vidage_url = $request->file('vidage')->store('vidage');
+        $rattachement_url = $request->file('rattachement')->store('rattachement');
+
 
         $travaux3Dgls = new travaux_3d_gls([
             'nature' => $request->get('nature'),
@@ -52,8 +60,8 @@ class travaux3DglsController extends Controller
             'materiel' => $request->get('materiel'),
             'observation' => $request->get('observation'),
             'situation_administrative' => $request->get('situation_administrative'),
-            'rattachement' => $request->file('rattachement')->store('rattachements'),
-            'vidage' => $request->file('vidage')->store('vidage'),
+            'rattachement' => Storage::url($rattachement_url),
+            'vidage' => Storage::url($vidage_url),
             'id_user' => auth()->user()->id, // Assuming you want to associate the current user
         ]);
 

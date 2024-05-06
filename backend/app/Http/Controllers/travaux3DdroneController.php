@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\travaux_3d_drone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
 
 class travaux3DdroneController extends Controller
 {
@@ -28,20 +31,38 @@ class travaux3DdroneController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::validate($request->all(), [
             'nature' => 'required',
             'Numéro_de_dossier' => 'required',
             'Numéro_de_mission' => 'required',
             'Equipe_de_terrain' => 'required',
             'materiel' => 'required',
             'situation_administrative' => 'required',
-            'rattachement' => 'required|mimes:jpg,png,jpeg',
-            'gcp' => 'required|mimes:txt,docx,doc',
-            'log' => 'required|mimes:bin,zip,rar',
-            'photos' => 'required|mimes:zip,rar,pdf',
-            'statique' => 'required|mimes:txt,zip,rar,doc,docx',
+            'rattachement' => [
+                'required',
+                File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar']) // 1MB max
+            ],
+            'gcp' => [
+                'required', File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar', 'txt', 'docx', 'doc'])
+            ],
+            'log' => [
+                'required', File::types(['pdf', 'zip', 'rar', 'txt', 'docx', 'doc', 'bin'])
+            ],
+            'photos' => [
+                'required', File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
+            'statique' => [
+                'required', File::types(['pdf', 'zip', 'rar', 'txt', 'docx', 'doc'])
+            ],
             // Add validation rules for other fields as necessary
         ]);
+
+        $gcp_url = $request->file('gcp')->store('gcps');
+        $rattachement_url = $request->file('rattachement')->store('rattachement');
+        $log_url = $request->file('log')->store('log');
+        $photos_url = $request->file('photos')->store('photos');
+        $statique_url = $request->file('statique')->store('statiques');
+
 
         $travaux3Ddrone = new travaux_3d_drone([
             'nature' => $request->get('nature'),
@@ -52,11 +73,11 @@ class travaux3DdroneController extends Controller
             'materiel' => $request->get('materiel'),
             'observation' => $request->get('observation'),
             'situation_administrative' => $request->get('situation_administrative'),
-            'rattachement' => $request->file('rattachement')->store('rattachements'),
-            'gcp' => $request->file('gcp')->store('gcps'),
-            'log' => $request->file('log')->store('log'),
-            'photos' => $request->file('photos')->store('photos'),
-            'statique' => $request->file('statique')->store('statiques'),
+            'rattachement' => Storage::url($rattachement_url),
+            'gcp' => Storage::url($gcp_url),
+            'log' => Storage::url($log_url),
+            'photos' => Storage::url($photos_url),
+            'statique' => Storage::url($statique_url),
 
             // Assign other fields as necessary
             'id_user' => auth()->user()->id, // Assuming you want to associate the current user

@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('nature');
             $table->string('Numéro_de_dossier');
             $table->string('Numéro_de_mission');
-            $table->string('titre_foncier');
+            $table->string('titre_foncier')->nullable();
             $table->string('Equipe_de_terrain');
             $table->string('materiel');
-            $table->text('observation'); // This column can store the content of a <textarea>
+            $table->text('observation')->nullable();  // This column can store the content of a <textarea>
             $table->text('situation_administrative'); // This column can store the content of a <textarea>
             $table->text('rattachement');
             $table->unsignedBigInteger('id_user'); // Matches the type of the id column in the users table

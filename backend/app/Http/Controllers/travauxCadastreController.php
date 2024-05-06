@@ -6,6 +6,7 @@ use App\Models\travaux_cadastre;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\File;
 
 
@@ -33,7 +34,7 @@ class travauxCadastreController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::validate($request->all(), [
             'nature' => 'required',
             'Numéro_de_dossier' => 'required',
             'Numéro_de_mission' => 'required',
@@ -41,15 +42,23 @@ class travauxCadastreController extends Controller
             'Equipe_de_terrain' => 'required',
             'materiel' => 'required',
             'situation_administrative' => 'required',
-            'rattachement' => 'required|mimes:jpg,png,jpeg',
-            'croquis_de_levé' => 'required|mimes:jpg,png,jpeg',
-            'vidage' => [
+            'rattachement' => [
                 'required',
-                'file', // Corrected validation rule
-                'mimes:txt,docx,jpeg,jpg' // Corrected validation rule
+                File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
             ],
-            'image' => 'required|mimes:jpg,png,jpeg',
+            'croquis_de_levé' => [
+                'required', File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
+            'vidage' => [
+                'required', File::types(['pdf', 'zip', 'rar', 'txt', 'docx', 'doc'])
+            ],
+            'image' => [
+                'required', File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
         ]);
+        // Validate the request data
+
+        // Check if validation fails
 
         $image_url = $request->file('image')->store('images');
         $rattachement_url = $request->file('rattachement')->store('rattachement');

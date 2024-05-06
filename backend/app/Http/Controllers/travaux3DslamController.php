@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\travaux_3d_slam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Storage;
 
 class travaux3DslamController extends Controller
 {
@@ -28,7 +31,7 @@ class travaux3DslamController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::validate($request->all(), [
             'nature' => 'required',
             'Numéro_de_dossier' => 'required',
             'Numéro_de_mission' => 'required',
@@ -36,12 +39,19 @@ class travaux3DslamController extends Controller
             'Equipe_de_terrain' => 'required',
             'materiel' => 'required',
             'situation_administrative' => 'required',
-            'rattachement' => 'required|mimes:jpg,png,jpeg',
-            'cibles' => 'required|mimes:.txt,docx,doc',
+            'rattachement' => [
+                'required',
+                File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
+            'cibles' => [
+                'required', File::types(['pdf', 'zip', 'rar', 'txt', 'docx', 'doc'])
+            ],
             'lien' => 'required',
 
             // Add validation rules for other fields as necessary
         ]);
+        $rattachement_url = $request->file('rattachement')->store('rattachement');
+        $cibles_url = $request->file('cibles')->store('cibles');
 
         $travaux3Dslam = new travaux_3d_slam([
             'nature' => $request->get('nature'),
@@ -52,8 +62,8 @@ class travaux3DslamController extends Controller
             'materiel' => $request->get('materiel'),
             'observation' => $request->get('observation'),
             'situation_administrative' => $request->get('situation_administrative'),
-            'rattachement' => $request->file('rattachement')->store('rattachements'),
-            'cibles' => $request->file('cibles')->store('cibles'),
+            'rattachement' => Storage::url($rattachement_url),
+            'cibles' => Storage::url($cibles_url),
             'lien' => $request->get('lien'),
             'id_user' => auth()->user()->id, // Assuming you want to associate the current user
         ]);

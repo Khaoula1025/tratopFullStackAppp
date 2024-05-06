@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('titre_foncier');
             $table->string('Equipe_de_terrain');
             $table->string('materiel');
-            $table->text('observation'); // This column can store the content of a <textarea>
+            $table->text('observation')->nullable(); // This column can store the content of a <textarea>
             $table->text('situation_administrative'); // This column can store the content of a <textarea>
             $table->text('rattachement');
             $table->unsignedBigInteger('id_user'); // Matches the type of the id column in the users table

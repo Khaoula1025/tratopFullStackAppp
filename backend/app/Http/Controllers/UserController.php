@@ -18,7 +18,7 @@ class UserController extends Controller
         'travaux_3d_gls' => 'App\Models\travaux_3d_gls',
         'travaux_3d_mms' => 'App\Models\travaux_3d_mms',
     ];
-
+    // function to get one user history 
     public function getUserHistory($allUsers = false)
     {
         // Initialize an empty collection to hold all records
@@ -52,6 +52,7 @@ class UserController extends Controller
             'data' => $records
         ]);
     }
+    // function to get all users history 
     public function getAllUsersHistory($allUsers = true)
     {
 
@@ -62,8 +63,6 @@ class UserController extends Controller
         foreach ($this->models as $type => $modelClass) {
             // Dynamically load the model class
             $model = new $modelClass;
-
-            // Fetch records for all users across all models
             // Passing null as the second argument to getHistoryByType indicates fetching records for all users
             if ($allUsers) {
                 // Fetch records for all users across all models
@@ -87,9 +86,7 @@ class UserController extends Controller
             'data' => $records
         ]);
     }
-
-
-
+    // function to get the records with type
     private function getHistoryByType($type, $userId)
     {
         $model = "App\\Models\\" . ucfirst($type);
@@ -110,7 +107,10 @@ class UserController extends Controller
 
         return $records;
     }
-
+    public function getAllHistory(Request $request)
+    {
+        $allUsers = User::all();
+    }
 
 
     public function index()

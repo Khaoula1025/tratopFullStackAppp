@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\travaux_topographique;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Storage;
 
 class travauxTopographiqueController extends Controller
 {
@@ -28,7 +31,7 @@ class travauxTopographiqueController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::validate($request->all(), [
             'nature' => 'required',
             'Numéro_de_dossier' => 'required',
             'Numéro_de_mission' => 'required',
@@ -36,13 +39,25 @@ class travauxTopographiqueController extends Controller
             'Equipe_de_terrain' => 'required',
             'materiel' => 'required',
             'situation_administrative' => 'required',
-            'rattachement' => 'required|mimes:jpg,png,jpeg,pdf',
-            'croquis_de_terrain' => 'required|mimes:jpg,png,jpeg,pdf',
-            'vidage' => 'required|mimes:GT2,txt,docx,jpg,pdf',
-            'image' => 'required|mimes:jpg,png,jpeg,pdf',
-
-            // Add validation rules for other fields as necessary
+            'rattachement' =>  [
+                'required',
+                File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
+            'croquis_de_terrain' =>  [
+                'required', File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
+            'vidage' => [
+                'required', File::types(['pdf', 'zip', 'rar', 'txt', 'docx', 'doc'])
+            ],
+            'image' => [
+                'required', File::types(['jpg', 'png', 'jpeg', 'pdf', 'zip', 'rar'])
+            ],
         ]);
+        $image_url = $request->file('image')->store('images');
+        $rattachement_url = $request->file('rattachement')->store('rattachement');
+        $croquis_de_terrain_url = $request->file('croquis_de_terrain')->store('croquis_de_terrain');
+        $vidage_url = $request->file('vidage')->store('vidage');
+
 
         $travauxTopographique = new travaux_topographique([
             'nature' => $request->get('nature'),
@@ -53,10 +68,10 @@ class travauxTopographiqueController extends Controller
             'materiel' => $request->get('materiel'),
             'observation' => $request->get('observation'),
             'situation_administrative' => $request->get('situation_administrative'),
-            'rattachement' => $request->file('rattachement')->store('rattachements'),
-            'croquis_de_terrain' => $request->file('croquis_de_terrain')->store('croquis_de_terrain'),
-            'vidage' => $request->file('vidage')->store('vidages'),
-            'image' => $request->file('image')->store('images'),
+            'rattachement' =>  Storage::url($rattachement_url),
+            'croquis_de_terrain' => Storage::url($croquis_de_terrain_url),
+            'vidage' =>  Storage::url($vidage_url),
+            'image' =>  Storage::url($image_url),
             // Assign other fields as necessary
             'id_user' => auth()->user()->id, // Assuming you want to associate the current user
         ]);

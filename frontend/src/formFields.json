@@ -109,7 +109,7 @@
               "label": "Rattachement",
               "type": "file",
               "name": "rattachement",
-              "extension": "Formats acceptés: .png , jpg , jpeg"
+              "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar"
             }
           ],
           "uniqueFields": [
@@ -119,19 +119,19 @@
                   "label": "croquis de levé",
                   "type": "file",
                   "name": "croquis_de_levé",
-                  "extension": "Formats acceptés: .png , jpg , jpeg"
+                  "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar"
                 },
                 {
                   "label": "vidage",
                   "type": "file",
                   "name": "vidage",
-                  "extension": "Formats acceptés: .txt , .docx , .jpg"
+                  "extension": "Formats acceptés:  pdf, zip, rar, txt, docx, doc"
                 },
                 {
                   "label": "image",
                   "type": "file",
                   "name": "image",
-                  "extension": "Formats acceptés: .png , jpg , jpeg"
+                  "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar"
                 }
               ],
               "forTopo": [
@@ -139,18 +139,20 @@
                   "label": "Croquis de Terrain",
                   "type": "file",
                   "name": "croquis_de_terrain",
-                  "extension": "Formats acceptés: .png , jpg , jpeg"
+                  "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar"
                 },
                 {
                   "label": "vidage",
                   "type": "file",
                   "name": "vidage",
-                  "extension": "Formats acceptés:.txt , .docx , .jpg"
+                  "extension": "Formats acceptés: pdf, zip, rar, txt, docx, doc"
                 },
                 {
                   "label": "image",
                   "type": "file",
-                  "name": "image"
+                  "name": "image",
+                  "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar"
+
                 }
               ],
               "forIFE": [
@@ -158,25 +160,25 @@
                   "label": "Croquis",
                   "type": "file",
                   "name": "croquis",
-                  "extension": "Formats acceptés: .png , jpg , jpeg"
+                  "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar"
                 },
                 {
                   "label": "vidage",
                   "type": "file",
                   "name": "vidage",
-                  "extension": "Formats acceptés:.txt , .docx , jpg "
+                  "extension": "Formats acceptés: pdf, zip, rar, txt, docx, doc"
                 },
                 {
                   "label": "image",
                   "type": "file",
                   "name": "image",
-                  "extension": "Formats acceptés: .png , jpg , jpeg"
+                  "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar"
                 },
                 {
                   "label": "CIN",
                   "type": "file",
                   "name": "cin",
-                  "extension": "Formats acceptés: .png , jpg , jpeg"
+                  "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar"
                 },
                 {
                   "label": "riverain",
@@ -219,25 +221,25 @@
                   "label": "GCP",
                   "type": "file",
                   "name": "gcp",
-                  "extension": "Formats acceptés: .txt, jpeg ,jpg"
+                  "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar, txt, docx, doc"
                 },
                 {
                   "label": "Log",
                   "type": "file",
                   "name": "log",
-                  "extension": "Formats acceptés: .bin"
+                  "extension": "Formats acceptés: pdf, zip, rar, txt, docx, doc, bin"
                 },
                 {
                   "label": "photos",
                   "type": "file",
                   "name": "photos",
-                  "extension": "Formats acceptés: .zip"
+                  "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar'"
                 },
                 {
                   "label": "Statique",
                   "type": "file",
                   "name": "statique",
-                  "extension": "Formats acceptés: .txt, .zip"
+                  "extension": "Formats acceptés: pdf, zip, rar, txt, docx, doc"
                 }
               ],
               "SLAM": [
@@ -245,7 +247,7 @@
                   "label": "Cibles",
                   "type": "file",
                   "name": "cibles",
-                  "extension": "Formats acceptés: .txt"
+                  "extension": "Formats acceptés:pdf, zip, rar, txt, docx, doc"
                 },
                 {
                   "label": "lien",
@@ -266,7 +268,7 @@
                   "label": "vidage",
                   "type": "file",
                   "name": "vidage",
-                  "extension": "Formats acceptés: .zip"
+                  "extension": "Formats acceptés: pdf, zip, rar, txt, docx , doc"
                 }
               ]
             }
