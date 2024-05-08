@@ -5,7 +5,7 @@ import { Select, Option } from "@material-tailwind/react";
 export default function MesOperations() {
   const [operations, setOperations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [type, setType] = useState("");
+  const [type, setType] = useState("single");
 
   useEffect(() => {
     const fetchUserOperations = async () => {
@@ -18,7 +18,7 @@ export default function MesOperations() {
           },
         };
 
-        const response = await axios.get("/api/history?type=" + type, config);
+        const response = await axios.get(`/api/history/${type}`, config);
         // Ensure operations is always an array
         setOperations(
           Array.isArray(response.data.data) ? response.data.data : []

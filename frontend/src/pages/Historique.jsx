@@ -1,54 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 
 export default function Historique() {
   const [operations, setOperations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [type, setType] = useState("");
+  const formRef = useRef(); // Reference to the form
+  const type = useRef();
 
-  useEffect(() => {
-    const fetchUserOperations = async () => {
-      setIsLoading(true);
-      try {
-        const token = localStorage.getItem("ACCESS_TOKEN");
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
-        let url = "/api/history";
-        if (type === "All") {
-          url += "?all=true"; // Adjusted based on backend support
-        } else {
-          url += "?type=" + type;
-        }
-
-        const response = await axios.get(url, config);
-        console.log(response.data);
-        // Check for backend success message
-        if (response.data.message === "Operations fetched successfully.") {
-          setOperations(
-            Array.isArray(response.data.data) ? response.data.data : []
-          );
-        } else {
-          console.error(
-            "Backend failed to fetch operations:",
-            response.data.message
-          );
-          // Handle error, e.g., show an error message to the user
-        }
-      } catch (error) {
-        console.error("Failed to fetch user operations:", error);
-      } finally {
-        setIsLoading(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem("ACCESS_TOKEN");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      // Ensure the URL is correctly formatted to include the type as a path parameter
+      let url = `/api/history/${type.current.value}`;
+      const response = await axios.get(url, config);
+      console.log(response.data);
+      if (response.data.message === "Operations fetched successfully.") {
+        setOperations(
+          Array.isArray(response.data.data) ? response.data.data : []
+        );
+      } else {
+        console.error(
+          "Backend failed to fetch operations:",
+          response.data.message
+        );
       }
-    };
-
-    if (type !== "All" || operations.length === 0) {
-      fetchUserOperations();
+    } catch (error) {
+      console.error("Failed to fetch user operations:", error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [type]);
+  };
+
+  // Rest of your component code remains the same
 
   const getTableHeaders = () => {
     if (Array.isArray(operations) && operations.length > 0) {
@@ -67,7 +57,7 @@ export default function Historique() {
     <div className="flex flex-col ">
       <h1 className="text-3xl font-bold mb-5 mt-5">Others Operations</h1>
       {/* search bar */}
-      <form class="flex flex-col md:flex-row gap-3">
+      <form class="flex flex-col md:flex-row gap-3" onSubmit={handleSubmit}>
         <div class="flex">
           <input
             type="text"
@@ -84,9 +74,10 @@ export default function Historique() {
         <select
           id="pricingType"
           name="pricingType"
+          ref={type}
           class=" h-10 border-2 border-gray-500 focus:outline-none focus:borde-gray-500 text-gray-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
         >
-          <option value="forAll">All</option>
+          <option value="All">All</option>
           <option value="travaux_cadastre">travaux cadastre</option>
           <option value="travaux_topographique">travaux topographique</option>
           <option value="travaux_ife">travaux IFE</option>
