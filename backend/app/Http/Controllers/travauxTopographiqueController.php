@@ -109,6 +109,7 @@ class travauxTopographiqueController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $travauxTopographique = travaux_topographique::findOrFail($id);
+        $travauxTopographique->delete();
     }
 }

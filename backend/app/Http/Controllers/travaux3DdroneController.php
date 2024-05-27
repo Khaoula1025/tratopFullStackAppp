@@ -118,6 +118,7 @@ class travaux3DdroneController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $travaux3DDrone = travaux_3d_drone::findOrFail($id);
+        $travaux3DDrone->delete();
     }
 }

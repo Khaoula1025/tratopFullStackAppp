@@ -99,6 +99,7 @@ class travaux3DmmsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $travaux3dMms = travaux_3d_mms::findOrFail($id);
+        $travaux3dMms->delete();
     }
 }

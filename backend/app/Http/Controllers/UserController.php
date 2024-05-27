@@ -26,22 +26,24 @@ class UserController extends Controller
         $records = collect();
 
         if ($type === 'single') {
-            $records = $records->concat($this->getHistoryByType($type, auth()->user()->id));
+            list($result, $typeName) = $this->getHistoryByType($type, auth()->user()->id);
+            // $typeName = $result['type'];
         } else {
-            $records = $records->concat($this->getHistoryByType($type, null));
-        }
+            list($result, $typeName) = $this->getHistoryByType($type, null);
 
+            // $typeName = $result['type'];
+        }
         // Combine the related records for each type of 3D travaux
-        if ($records->isEmpty()) {
+        if ($result->isEmpty()) {
             return response()->json([
                 'message' => 'No operations found.',
                 'data' => []
             ], 200);
         }
-
         return response()->json([
             'message' => 'Operations fetched successfully.',
-            'data' => $records
+            'data' => $result,
+            'type' => $typeName
         ]);
     }
 
@@ -58,29 +60,55 @@ class UserController extends Controller
             // Loop through each model and fetch records
             foreach ($this->models as $modelType => $modelClass) {
                 $model = "App\\Models\\" . ucfirst($modelType);
-                $records = $records->concat($model::all());
+                $tableName = (new $model())->getTable(); // Get the table name from the model
+                $modelRecords = $model::select($tableName . '.*', 'users.name as user_name') // Select all records and the user's name
+                    ->leftJoin('users', $tableName . '.id_user', '=', 'users.id') // Join the users table
+                    ->get(); // Execute the query
+
+                // Add a 'type' property to each record and add them to the $records collection
+                $records = $records->concat($modelRecords->map(function ($operation) use ($modelType) {
+                    $operation->type = $modelType; // Associate each record with its model type
+                    return $operation;
+                }));
             }
         } else if ($type === 'single') {
             // Fetch records for a single user across all models
             foreach ($this->models as $modelType => $modelClass) {
                 $model = "App\\Models\\" . ucfirst($modelType);
-                $userRecords = $model::where('id_user', $userId)->get();
+                $tableName = (new $model())->getTable(); // Get the table name from the model
+                $userRecords = $model::select($tableName . '.*', 'users.name as user_name') // Select all records and the user's name
+                    ->leftJoin('users', $tableName . '.id_user', '=', 'users.id') // Join the users table
+                    ->where($tableName . '.id_user', $userId) // Filter by user ID
+                    ->get(); // Execute the query
+
                 // Add a 'type' property to each record and add them to the $records collection
-                $records = $records->concat($userRecords->map(function ($operation) use ($type) {
-                    $operation->type = $type;
+                $records = $records->concat($userRecords->map(function ($operation) use ($modelType) {
+                    $operation->type = $modelType; // Associate each record with its model type
                     return $operation;
                 }));
             }
         } else {
             // If the type is not 'All', fetch records from the specified model
             $model = "App\\Models\\" . ucfirst($type);
+            $tableName = (new $model())->getTable(); // Get the table name from the model
             if ($userId === null) {
-                $records = $model::all();
+                $records = $model::select($tableName . '.*', 'users.name as user_name') // Select all records and the user's name
+                    ->leftJoin('users', $tableName . '.id_user', '=', 'users.id') // Join the users table
+                    ->get(); // Execute the query
+
+                // Add a 'type' property to each record
+                $records = $records->map(function ($operation) use ($type) {
+                    $operation->type = $type;
+                    return $operation;
+                });
             }
         }
 
-        return $records;
+        // Return both the records and the typeName
+        return [$records, $type]; // Assuming $type is the same as $typeName for simplicity
     }
+
+
 
     public function getAllHistory(Request $request)
     {
@@ -160,9 +188,14 @@ class UserController extends Controller
         // Loop through each model and fetch records, then count them
         foreach ($this->models as $type => $model) {
             $records = $this->getHistoryByType($type, $user->id);
-            $count = $records->count();
-            $count = $records->count();
-            $recordCounts[$type] = $count;
+            if ($records instanceof \Illuminate\Support\Collection) {
+                $count = $records->count();
+                $recordCounts[$type] = $count;
+            } else {
+                // Handle if getHistoryByType does not return a collection
+                // You can log an error or handle it based on your requirements
+                $recordCounts[$type] = 0;
+            }
         }
 
         // Return the user details along with the counts of each record type

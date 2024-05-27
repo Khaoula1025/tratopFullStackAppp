@@ -99,6 +99,7 @@ class travaux3DglsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $travaux3Dgls = travaux_3d_gls::findOrFail($id);
+        $travaux3Dgls->delete();
     }
 }

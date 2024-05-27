@@ -102,6 +102,7 @@ class travaux3DslamController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $travaux3dSlam = travaux_3d_slam::findOrFail($id);
+        $travaux3dSlam->delete();
     }
 }

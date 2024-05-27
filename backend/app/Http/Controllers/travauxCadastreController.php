@@ -116,6 +116,7 @@ class travauxCadastreController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $travauxCadastre = travaux_cadastre::findOrFail($id);
+        $travauxCadastre->delete();
     }
 }
