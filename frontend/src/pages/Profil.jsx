@@ -5,7 +5,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 function Profil() {
   const [user, setUser] = useState({});
-  const [recordCounts, setRecordCount] = useState({});
+  const [recordCounts, setRecordCounts] = useState({});
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -16,11 +16,9 @@ function Profil() {
             Authorization: `Bearer ${token}`,
           },
         };
-        const response = await axios.get("/api/user-details", config); // Adjust the URL to your backend endpoint
+        const response = await axios.get("/api/user-details", config);
         setUser(response.data.user);
-        console.log(response.data);
-        setRecordCount(response.data.recordCounts);
-        console.log(recordCounts);
+        setRecordCounts(response.data.recordCounts);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
@@ -34,7 +32,6 @@ function Profil() {
       <h1 className="text-3xl font-bold mb-4">Profil</h1>
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-semibold mb-4">User Information</h2>
-
         <p className="mb-2">
           <span className="font-semibold">
             {" "}
@@ -57,7 +54,6 @@ function Profil() {
           </span>{" "}
           <span>{user.email}</span>
         </p>
-        {/* Add more user details as needed */}
       </div>
       <div className="bg-white rounded-lg shadow-md mt-6 p-6">
         <h2 className="text-xl font-semibold mb-4">Record Count</h2>

@@ -4,23 +4,41 @@ import formFields from "../formFields.json";
 import { useNavigate, useParams } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 import { ToastContainer, toast } from "react-toastify";
-export const DynamicForm = () => {
+export const DynamicForm = ({ mode, updateType, id }) => {
   //for navigation
-  const { travauType } = useParams();
+  let travauType = useParams().travauType;
   const navigate = useNavigate();
   const { token } = useStateContext();
   const [errors, setErrors] = useState({});
 
+  if (mode === "update") {
+    if (
+      [
+        "travaux_3d_drone",
+        "travaux_3d_slam",
+        "travaux_3d_gls",
+        "travaux_3d_mms",
+      ].includes(updateType)
+    ) {
+      travauType = "for3D";
+    } else {
+      travauType = updateType;
+    }
+  }
+
+  console.log(travauType);
   //for Selecting fields
   const commonFields = formFields.data[0].fields[0].commonFields || [];
   const uniqueFields = formFields.data[0].fields[0].uniqueFields || [];
   const uniqueFieldsFiltred = uniqueFields[0][travauType] || [];
+  console.log("uniqueFields ", uniqueFieldsFiltred);
   //for title
   const titreDeTravaux = formFields.data[0].travauxType.find(
     (c) => c.label === travauType
   );
   const name = titreDeTravaux ? titreDeTravaux.name : "Not found";
 
+  console.log(travauType);
   //  extracting materials
   const [selectedMaterial, setSelectedMaterial] = useState("");
   //extracting materials fields for 3D
@@ -99,54 +117,112 @@ export const DynamicForm = () => {
     // Proceed with the submission
     console.log(formDataToSend);
     // Construct the API endpoint URL based on the travauType
-    const apiEndpoint = `/api/${travauType}`;
-    axios
-      .post(apiEndpoint, formDataToSend, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Replace ${token} with the actual token
-          "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        if (response.data.success) {
-          navigate("/");
-          setFormData({});
+    //handle the mode diffrence , for update:
+    let apiEndpoint;
+    if (mode === "update") {
+      // For update, construct the URL differently
+      apiEndpoint = `/api/${travauType}/${id}`;
+      console.log("id endpoint", apiEndpoint); // Assuming 'id' is the identifier of the item being updated
 
-          toast.success("Data saved succesfully.", {
-            position: "Bottom left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }
-        setErrors({});
-      })
-      .catch((error) => {
-        console.error(error);
+      // Log FormData entries
+      console.log("FormData to send:");
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(`${key}:`, value);
+      }
+      axios
+        .put(apiEndpoint, formDataToSend, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Replace ${token} with the actual token
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.success) {
+            navigate("/");
+            setFormData({});
 
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.errors
-        ) {
-          setErrors(error.response.data.errors);
-          toast.error("there was an error saving data", {
-            position: "Bottom left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }
-      });
-    console.log("error", errors);
+            toast.success("Data saved succesfully.", {
+              position: "Bottom left",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+          setErrors({});
+        })
+        .catch((error) => {
+          console.error(error);
+
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.errors
+          ) {
+            setErrors(error.response.data.errors);
+            toast.error("there was an error saving data", {
+              position: "Bottom left",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+        });
+    } else {
+      apiEndpoint = `/api/${travauType}`;
+      axios
+        .post(apiEndpoint, formDataToSend, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Replace ${token} with the actual token
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.success) {
+            setFormData({});
+
+            toast.success("Data saved succesfully.", {
+              position: "Bottom left",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+          setErrors({});
+        })
+        .catch((error) => {
+          console.error(error);
+
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.errors
+          ) {
+            setErrors(error.response.data.errors);
+            toast.error("there was an error saving data", {
+              position: "Bottom left",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+        });
+    }
   }
 
   // Render the form
@@ -363,27 +439,44 @@ export const DynamicForm = () => {
             )}
           </div>
         ))}
-        <div className="flex justify-between space-x-4">
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300 ease-in-out"
-          >
-            Submit
-          </button>
-          <button
-            type="reset"
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50 transition duration-300 ease-in-out"
-          >
-            Reset
-          </button>
-          <button
-            type="button"
-            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ease-in-out"
-            onClick={() => navigate("/")}
-          >
-            Back
-          </button>
-        </div>
+        {mode === "update" ? (
+          <div className="flex justify-between space-x-4">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300 ease-in-out"
+            >
+              Submit
+            </button>
+            <button
+              type="reset"
+              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50 transition duration-300 ease-in-out"
+            >
+              Reset
+            </button>
+          </div>
+        ) : (
+          <div className="flex justify-between space-x-4">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300 ease-in-out"
+            >
+              Submit
+            </button>
+            <button
+              type="reset"
+              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50 transition duration-300 ease-in-out"
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ease-in-out"
+              onClick={() => navigate("/")}
+            >
+              Back
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );

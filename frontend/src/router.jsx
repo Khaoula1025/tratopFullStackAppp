@@ -4,15 +4,16 @@ import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
 import GestLayout from "./components/GestLayout";
 import DefaultLayout from "./components/DefaultLayout";
-import Dashboard from "./pages/Dashboard";
 import LadingPage from "./pages/LadingPage";
 import Travaux from "./components/Travaux";
 import { DynamicForm } from "./components/DynamicForm";
 import Historique from "./pages/Historique";
-import NavbarAndSideBar from "./components/NavbarAndSideBar";
 import UserManagement from "./pages/UserManagement";
 import Profil from "./pages/Profil";
 import MesOperations from "./pages/MesOperations";
+import NewHome from "./pages/NewHome";
+import { Home } from "./pages/Home";
+import HomeHome from "./pages/HomeHome";
 const routes = [
   {
     path: "/",
@@ -60,6 +61,14 @@ const routes = [
       {
         path: "/signup",
         element: <SignUp />,
+      },
+      {
+        path: "/homen",
+        element: <NewHome />,
+      },
+      {
+        path: "/home",
+        element: <HomeHome />,
       },
     ],
   },

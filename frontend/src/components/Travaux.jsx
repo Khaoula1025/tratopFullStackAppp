@@ -5,35 +5,29 @@ import { useNavigate } from "react-router-dom";
 function Travaux() {
   const navigate = useNavigate();
 
-  function handleType(travauType) {
-    navigate(`/DynamicForm/${travauType}`); // Adjusted path based on your comment
+  function handleType(travauxType) {
+    navigate(`/DynamicForm/${travauxType}`);
   }
 
   return (
-    <div className="max-w-xs mx-auto grid gap-6 lg:grid-cols-4   lg:max-w-none   ">
+    <div className="max-w-sm mx-auto grid gap-6 lg:grid-cols-4 lg:max-w-none">
       {formFields.data[0].travauxType.map((travaux, key) => (
         <div
           key={key}
-          className="flex flex-col h-full  bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden justify-center items-center"
-          onClick={() => handleType(travaux.label)} // Directly handle click to navigate
+          className="flex flex-col h-full bg-slate-300 border border-slate-200 shadow-2xl rounded-2xl overflow-hidden justify-center items-center transform transition-all duration-500 ease-in-out hover:bg-slate-400 hover:scale-105 cursor-pointer"
+          onClick={() => handleType(travaux.label)}
         >
-          {/* Image */}
           <img
-            className="object-cover h-48 w-full"
+            className="object-cover h-32 w-full"
             src={travaux.image}
-            width="304"
-            height="192"
             alt="Course 01"
           />
-          {/* Card Content */}
-          <div className="flex-1 flex flex-col p-6">
-            {/* Card body */}
+          <div className="flex-1 flex flex-col p-4">
             <div className="flex-1">
-              {/* Header */}
               <header className="mb-2">
-                <h2 className="text-xl font-extrabold leading-snug">
+                <h2 className="text-base font-semibold leading-normal text-center">
                   <a
-                    className="text-slate-900 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300"
+                    className="text-white focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300"
                     href="#0"
                   >
                     {travaux.name}

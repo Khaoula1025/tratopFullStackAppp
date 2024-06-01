@@ -76,10 +76,12 @@ class travaux3DslamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $travaux3dSlam = travaux_3d_slam::findOrFail($id);
+        return response()->json($travaux3dSlam);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -94,7 +96,51 @@ class travaux3DslamController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $travaux3dSlam = travaux_3d_slam::findOrFail($request->id);
+        if (!$travaux3dSlam) {
+            return response()->json(['error' => true, 'message' => 'no id found ']);
+        }
+
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
+            'nature' => 'sometimes|required',
+            'Numéro_de_dossier' => 'sometimes|required',
+            'Numéro_de_mission' => 'sometimes|required',
+            'titre_foncier' => 'sometimes|required',
+            'Equipe_de_terrain' => 'sometimes|required',
+            'materiel' => 'sometimes|required',
+            'situation_administrative' => 'sometimes|required',
+
+        ]);
+
+        // \Log validation results
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+
+        // Update other fields
+        $data = $request->only([
+            'nature',
+            'Numéro_de_dossier',
+            'Numéro_de_mission',
+            'titre_foncier',
+            'Equipe_de_terrain',
+            'materiel',
+            'situation_administrative',
+            'observation',
+
+        ]);
+
+
+
+        $travaux3dSlam->fill($data);
+
+        // Save the updated record
+        $travaux3dSlam->save();
+
+
+        return response()->json(['success' => true, 'message' => 'Record updated successfully']);
     }
 
     /**

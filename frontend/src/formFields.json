@@ -5,24 +5,70 @@
         {
           "name": "Travaux Cadastraux",
           "image": "/travaux-cadastre.jpg",
-          "label": "forCada"
+          "label": "travaux_cadastre"
         },
         {
           "name": "Travaux Topographiques",
           "image": "/travaux-topographique.jpg",
-          "label": "forTopo"
+          "label": "travaux_topographique"
         },
         {
           "name": "IFE",
           "image": "/infra.png",
-          "label": "forIFE"
+          "label": "travaux_ife"
         },
         {
           "name": "Département de recherche et de capture de la réalité",
           "image": "/Cadastre.jpg",
           "label": "for3D"
         }
+
       ],
+      "travauxTypeforUpdate": [
+        {
+          "name": "Travaux Cadastraux",
+          "image": "/travaux-cadastre.jpg",
+          "label": "travaux_cadastre"
+        },
+        {
+          "name": "Travaux Topographiques",
+          "image": "/travaux-topographique.jpg",
+          "label": "travaux_topographique"
+        },
+        {
+          "name": "IFE",
+          "image": "/infra.png",
+          "label": "travaux_ife"
+        },
+        {
+          "name": "Département de recherche et de capture de la réalité",
+          "image": "/Cadastre.jpg",
+          "label": "for3D"
+        },
+        {
+          "name": "Travaux 3D par Drone",
+          "image": "/Cadastre.jpg",
+          "label": "travaux_3d_drone"
+        },
+        
+        {
+          "name": "Travaux 3D par GLS",
+          "image": "/Cadastre.jpg",
+          "label": "travaux_3d_gls"
+        },
+        {
+          "name": "Travaux 3D par MMS",
+          "image": "/Cadastre.jpg",
+          "label": "travaux_3d_mms"
+        },
+        {
+          "name": "Travaux 3D par Slam",
+          "image": "/Cadastre.jpg",
+          "label": "travaux_3d_slam"
+        }
+
+      ],
+     
       "fields": [
         {
           "commonFields": [
@@ -31,7 +77,7 @@
               "type": "select",
               "name": "nature",
               "options": {
-                "forCada": [
+                "travaux_cadastre": [
                   "Mise en Concordance",
                   "Copropriété",
                   "Morcellement",
@@ -39,7 +85,7 @@
                   "Morcellement_fusion",
                   "Lotissement"
                 ],
-                "forTopo": [
+                "travaux_topographique": [
                   "Implatation",
                   "Etat des Lieux",
                   "Plan Porcellaire",
@@ -48,6 +94,7 @@
                   "Plan Côté",
                   "Plan Bornage"
                 ],
+                
                 "for3D": [
                   "Plan Façade",
                   "Plan niveaux",
@@ -61,7 +108,59 @@
                   "Plan Côté",
                   "Plan Bornage"
                 ],
-                "forIFE": ["IFE"]
+                "travaux_3d_drone": [
+                  "Plan Façade",
+                  "Plan niveaux",
+                  "Plan coupes verticales",
+                  "Orthophoto",
+                  "BIM",
+                  "Expertise immobilière",
+                  "Plan Porcellaire",
+                  "Plan situation",
+                  "Etat des Lieux",
+                  "Plan Côté",
+                  "Plan Bornage"
+                ],
+                "travaux_3d_slam": [
+                  "Plan Façade",
+                  "Plan niveaux",
+                  "Plan coupes verticales",
+                  "Orthophoto",
+                  "BIM",
+                  "Expertise immobilière",
+                  "Plan Porcellaire",
+                  "Plan situation",
+                  "Etat des Lieux",
+                  "Plan Côté",
+                  "Plan Bornage"
+                ],
+                "travaux_3d_gls": [
+                  "Plan Façade",
+                  "Plan niveaux",
+                  "Plan coupes verticales",
+                  "Orthophoto",
+                  "BIM",
+                  "Expertise immobilière",
+                  "Plan Porcellaire",
+                  "Plan situation",
+                  "Etat des Lieux",
+                  "Plan Côté",
+                  "Plan Bornage"
+                ],
+                "travaux_3d_mms": [
+                  "Plan Façade",
+                  "Plan niveaux",
+                  "Plan coupes verticales",
+                  "Orthophoto",
+                  "BIM",
+                  "Expertise immobilière",
+                  "Plan Porcellaire",
+                  "Plan situation",
+                  "Etat des Lieux",
+                  "Plan Côté",
+                  "Plan Bornage"
+                ],
+                "travaux_ife": ["IFE"]
               }
             },
             {
@@ -89,10 +188,15 @@
               "type": "select",
               "name": "materiel",
               "options": {
-                "forCada": ["station Totale", "GPS", "Niveau"],
-                "forTopo": ["station Totale", "GPS", "Niveau"],
-                "forIFE": ["station Totale", "GPS", "Niveau"],
-                "for3D": ["Drone", "SLAM", "GLS", "MMS"]
+                "travaux_cadastre": ["station Totale", "GPS", "Niveau"],
+                "travaux_topographique": ["station Totale", "GPS", "Niveau"],
+                "travaux_ife": ["station Totale", "GPS", "Niveau"],
+                "travaux_3d_mms": ["Drone", "SLAM", "GLS", "MMS"],
+                "for3D": ["Drone", "SLAM", "GLS", "MMS"],
+                "travaux_3d_gls": ["Drone", "SLAM", "GLS", "MMS"],
+                "travaux_3d_slam": ["Drone", "SLAM", "GLS", "MMS"],
+                "travaux_3d_drone": ["Drone", "SLAM", "GLS", "MMS"]
+
               }
             },
             {
@@ -114,7 +218,7 @@
           ],
           "uniqueFields": [
             {
-              "forCada": [
+              "travaux_cadastre": [
                 {
                   "label": "croquis de levé",
                   "type": "file",
@@ -134,7 +238,7 @@
                   "extension": "Formats acceptés: jpg, png, jpeg, pdf, zip, rar"
                 }
               ],
-              "forTopo": [
+              "travaux_topographique": [
                 {
                   "label": "Croquis de Terrain",
                   "type": "file",
@@ -155,7 +259,7 @@
 
                 }
               ],
-              "forIFE": [
+              "travaux_ife": [
                 {
                   "label": "Croquis",
                   "type": "file",

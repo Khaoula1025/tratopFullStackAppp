@@ -90,9 +90,10 @@ class travauxCadastreController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $travauxCadastre = travaux_cadastre::findOrFail($id);
+        return response()->json($travauxCadastre);
     }
 
     /**
@@ -106,10 +107,52 @@ class travauxCadastreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        // \Log the incoming request
+        // Retrieve the existing record
+        $travauxCadastre = travaux_cadastre::findOrFail($request->id);
+        if (!$travauxCadastre) {
+            return response()->json(['error' => true, 'message' => 'no id found ']);
+        }
+
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
+            'nature' => 'required',
+            'Numéro_de_dossier' => 'required',
+            'Numéro_de_mission' => 'required',
+            'titre_foncier' => 'required',
+            'Equipe_de_terrain' => 'required',
+            'materiel' => 'required',
+            'situation_administrative' => 'required',
+
+        ]);
+
+        // \Log validation results
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        // Update other fields
+        $data = $request->only([
+            'nature',
+            'Numéro_de_dossier',
+            'Numéro_de_mission',
+            'titre_foncier',
+            'Equipe_de_terrain',
+            'materiel',
+            'situation_administrative',
+            'observation',
+
+        ]);
+        $travauxCadastre->fill($data);
+
+        // Save the updated record
+        $travauxCadastre->save();
+
+
+        return response()->json(['success' => true, 'message' => 'Record updated successfully']);
     }
+
 
     /**
      * Remove the specified resource from storage.

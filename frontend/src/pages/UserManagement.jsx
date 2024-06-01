@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@material-tailwind/react";
+
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const token = localStorage.getItem("ACCESS_TOKEN");
@@ -26,7 +27,7 @@ const UserManagement = () => {
   const updateRole = (userId, newRole) => {
     // Update the user's role in the backend
     axios
-      .put(
+      .post(
         `/api/user/${userId}/updateRole`,
         { role: newRole },
         {
@@ -47,8 +48,8 @@ const UserManagement = () => {
         console.error("Error updating user role:", error);
       });
   };
+
   const deleteUser = (userId) => {
-    // Send a DELETE request to the backend to delete the user
     axios
       .delete(`/api/user/${userId}`, {
         headers: {
@@ -56,104 +57,100 @@ const UserManagement = () => {
         },
       })
       .then((response) => {
-        // Handle success (e.g., update the UI, show a success message)
         console.log("User deleted successfully");
-        // Optionally, update the users state to remove the deleted user
         setUsers(users.filter((user) => user.id !== userId));
       })
       .catch((error) => {
-        // Handle error (e.g., show an error message)
         console.error("Error deleting user:", error);
       });
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="overflow-hidden">
-            <h2 className="text-center text-3xl">Gestion des utilisateurs</h2>
-
-            <table className="min-w-full border-4 border-collapse border-gray-900 text-center">
-              <thead className="border-b">
-                <tr>
-                  <th
-                    scope="col"
-                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
-                  >
-                    id
-                  </th>
-                  <th
-                    scope="col"
-                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
-                  >
-                    name
-                  </th>
-                  <th
-                    scope="col"
-                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
-                  >
-                    email
-                  </th>
-                  <th
-                    scope="col"
-                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
-                  >
-                    Role
-                  </th>
-                  <th
-                    scope="col"
-                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
-                  >
-                    changer role
-                  </th>
-                  <th
-                    scope="col"
-                    className="text-sm font-medium text-gray-900 px-6 py-4 text-center border-4 border-gray-900"
-                  >
-                    Options
-                  </th>
+    <div className="flex flex-col items-center py-8 bg-gray-100 min-h-screen">
+      <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-6">
+          Gestion des utilisateurs
+        </h2>
+        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  ID
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Name
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Email
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Role
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Change Role
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Options
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {user.id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {user.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {user.email}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {user.role}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <select
+                      value={user.role}
+                      onChange={(e) => updateRole(user.id, e.target.value)}
+                      className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    >
+                      <option value="user">User</option>
+                      <option value="admin">Admin</option>
+                      {/* Add other roles as needed */}
+                    </select>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <Button
+                      className="text-white bg-red-600"
+                      onClick={() => deleteUser(user.id)}
+                    >
+                      Delete
+                    </Button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user.id} className="border-b">
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
-                      {user.id}
-                    </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
-                      {user.name}
-                    </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
-                      {user.email}
-                    </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
-                      {user.role}
-                    </td>
-
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900 text-center">
-                      <select
-                        value={user.role}
-                        onChange={(e) => updateRole(user.id, e.target.value)}
-                      >
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                        {/* Add other roles as needed */}
-                      </select>
-                    </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-4 border-gray-900">
-                      <Button
-                        className="text-white bg-red-600"
-                        onClick={() => deleteUser(user.id)}
-                      >
-                        delete
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

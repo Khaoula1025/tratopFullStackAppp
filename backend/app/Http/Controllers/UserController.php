@@ -19,6 +19,15 @@ class UserController extends Controller
         'travaux_3d_gls' => 'App\Models\travaux_3d_gls',
         'travaux_3d_mms' => 'App\Models\travaux_3d_mms',
     ];
+    protected $tables = [
+        'travaux_cadastres' => 'App\Models\travaux_cadastre',
+        'travaux_topographiques' => 'App\Models\travaux_topographique',
+        'travaux_ifes' => 'App\Models\travaux_ife',
+        'travaux_3d_drones' => 'App\Models\travaux_3d_drone',
+        'travaux_3d_slams' => 'App\Models\travaux_3d_slam',
+        'travaux_3d_gls' => 'App\Models\travaux_3d_gls',
+        'travaux_3d_mms' => 'App\Models\travaux_3d_mms',
+    ];
     // function to get one user history 
     public function getUserHistory($type)
     {
@@ -127,40 +136,20 @@ class UserController extends Controller
         return back()->with('success', 'Role updated successfully');
     }
 
-    public function deleteUser(Request $request, User $user)
+    public function deleteUser(string $id)
     {
         // Retrieve the authenticated user
-        $authenticatedUser = Auth::user();
-
-        // Check if the authenticated user has the 'admin' role
-        if ($authenticatedUser->role !== 'admin') {
-            // If not, return an error response
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
-
-        // If the authenticated user is an admin, proceed with deletion
         // Delete related records
-        // $user->travauxTopographiques()->forceDelete();
-        // $user->travauxCadastres()->forceDelete();
-        // $user->travauxifes()->forceDelete();
-        // $user->travaux3dDrone()->forceDelete();
-        // $user->travaux3dSlam()->forceDelete();
-        // $user->travaux3dmms()->forceDelete();
-        // $user->travaux3dgls()->forceDelete();
-
-        // Perform any other necessary deletions for related models
-
-        // If using soft deletes, you might need to force delete
-        DB::statement('DELETE FROM users WHERE id =?', [$user]);
-        // Return a success response
-
-        foreach ($this->models  as $key => $value) {
-            echo "Key: $key; Value: $value\n";
-            // Use DB::delete or a query builder instance for a more Laravel-idiomatic approach
-            DB::table($key) // Replace 'your_table_name' with the actual table name
-                ->where('id', $user)
-                ->delete();
+        foreach ($this->tables as $tableName => $modelClass) {
+            // Use DB::table() with the correct table name
+            DB::table($tableName)->where('id_user', $id)->delete();
         }
+
+        // Delete the user record
+
+        $user = User::findorFail($id);
+        $user->delete();
+
         return response()->json(['message' => 'User deleted successfully'], 200);
     }
 

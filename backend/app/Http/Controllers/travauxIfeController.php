@@ -96,10 +96,12 @@ class travauxIfeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $travauxIfe = travaux_ife::findOrFail($id);
+        return response()->json($travauxIfe);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -116,7 +118,6 @@ class travauxIfeController extends Controller
 
     public function update(Request $request)
     {
-        dd($request);
         // \Log the incoming request
         // Retrieve the existing record
         $travauxIfe = travaux_ife::findOrFail($request->id);
@@ -129,14 +130,10 @@ class travauxIfeController extends Controller
             'nature' => 'sometimes|required',
             'Numéro_de_dossier' => 'sometimes|required',
             'Numéro_de_mission' => 'sometimes|required',
+            'titre_foncier' => 'sometimes|required',
             'Equipe_de_terrain' => 'sometimes|required',
             'materiel' => 'sometimes|required',
             'situation_administrative' => 'sometimes|required',
-            'rattachement' => 'sometimes|nullable|file|mimes:jpg,png,jpeg,pdf,zip,rar',
-            'croquis' => 'sometimes|nullable|file|mimes:jpg,png,jpeg,pdf,zip,rar',
-            'vidage' => 'sometimes|nullable|file|mimes:pdf,zip,rar,txt,docx,doc',
-            'image' => 'sometimes|nullable|file|mimes:jpg,png,jpeg,pdf,zip,rar',
-            'cin' => 'sometimes|nullable|file|mimes:jpg,png,jpeg,pdf,zip,rar',
             'riverain' => 'sometimes|required',
             'Centroïde' => 'sometimes|required|json',
         ]);
@@ -146,42 +143,20 @@ class travauxIfeController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Handle file uploads
-        if ($request->hasFile('rattachement')) {
-            $rattachement_url = $request->file('rattachement')->store('rattachement');
-            $travauxIfe->rattachement = Storage::url($rattachement_url);
-        }
-
-        if ($request->hasFile('croquis')) {
-            $croquis_url = $request->file('croquis')->store('croquis');
-            $travauxIfe->croquis = Storage::url($croquis_url);
-        }
-
-        if ($request->hasFile('vidage')) {
-            $vidage_url = $request->file('vidage')->store('vidage');
-            $travauxIfe->vidage = Storage::url($vidage_url);
-        }
-
-        if ($request->hasFile('image')) {
-            $image_url = $request->file('image')->store('image');
-            $travauxIfe->image = Storage::url($image_url);
-        }
-
-        if ($request->hasFile('cin')) {
-            $cin_url = $request->file('cin')->store('cin');
-            $travauxIfe->cin = Storage::url($cin_url);
-        }
 
         // Update other fields
         $data = $request->only([
             'nature',
             'Numéro_de_dossier',
             'Numéro_de_mission',
+            'titre_foncier',
             'Equipe_de_terrain',
             'materiel',
             'situation_administrative',
             'riverain',
-            'Centroïde'
+            'Centroïde',
+            'observation',
+
         ]);
 
 
