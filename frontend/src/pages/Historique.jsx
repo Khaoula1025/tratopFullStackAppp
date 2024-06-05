@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import axios from "axios";
 import UpdateModal from "../components/UpdateModal";
+import ConfirmationModal from "../components/ConfirmationModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useStateContext } from "../context/ContextProvider";
@@ -23,6 +24,9 @@ export default function Historique() {
   const { role, setRole } = useStateContext();
   const [selectedTravauxType, setSelectedTravauxType] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [deleteOperationId, setDeleteOperationId] = useState(null);
+  const [deleteOperationType, setDeleteOperationType] = useState(null);
 
   useEffect(() => {
     fetchOperations();
@@ -95,19 +99,21 @@ export default function Historique() {
       };
       const response = await axios.delete(`/api/${travauxType}/${id}`, config);
       if (response.data.success) {
+        toast.success("Opération supprimée avec succès.");
         setOperations((prevOperations) =>
           prevOperations.filter((operation) => operation.id !== id)
         );
         setAllOperations((prevOperations) =>
           prevOperations.filter((operation) => operation.id !== id)
         );
-        toast.success("Operation deleted successfully.");
       } else {
-        toast.error("Failed to delete operation.");
+        toast.error("suppression de l'opération.");
       }
     } catch (error) {
       console.error("Failed to delete operation:", error);
-      toast.error("There was an error deleting the operation.");
+      toast.error(
+        "Une erreur est survenue lors de la suppression de l'opération."
+      );
     }
   }, []);
 
@@ -163,6 +169,24 @@ export default function Historique() {
     const usernames = allOperations.map((operation) => operation.user_name);
     return Array.from(new Set(usernames));
   }, [allOperations]);
+
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen(false);
+    fetchOperations(); // Fetch updated operations
+  }, [fetchOperations]);
+
+  const confirmDelete = (id, travauxType) => {
+    setDeleteOperationId(id);
+    setDeleteOperationType(travauxType);
+    setIsConfirmationModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteOperationId && deleteOperationType) {
+      handleDelete(deleteOperationId, deleteOperationType);
+      setIsConfirmationModalOpen(false);
+    }
+  };
 
   return (
     <div className="flex flex-col p-5 bg-gray-50 min-h-screen">
@@ -243,7 +267,11 @@ export default function Historique() {
                           {headers.map((header, index) => (
                             <th
                               key={index}
-                              className="px-4 py-2 bg-blue-500 text-white"
+                              className={`px-4 py-2 bg-blue-500 text-white ${
+                                ["observation", "riverain"].includes(header)
+                                  ? "w-1/2"
+                                  : ""
+                              }`}
                             >
                               {header}
                             </th>
@@ -295,7 +323,7 @@ export default function Historique() {
                                     </button>
                                     <button
                                       onClick={() =>
-                                        handleDelete(
+                                        confirmDelete(
                                           operation.id,
                                           operation.type
                                         )
@@ -320,6 +348,14 @@ export default function Historique() {
                         setIsOpen={setIsModalOpen}
                         travauxType={selectedTravauxType}
                         id={selectedId}
+                      />
+                    )}
+                    {isConfirmationModalOpen && (
+                      <ConfirmationModal
+                        isOpen={isConfirmationModalOpen}
+                        onRequestClose={() => setIsConfirmationModalOpen(false)}
+                        onConfirm={handleConfirmDelete}
+                        message="Êtes-vous sûr de vouloir supprimer cette opération ?"
                       />
                     )}
                   </div>

@@ -6,9 +6,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\travaux_cadastre>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\travaux_ife>
  */
-class travaux_cadastreFactory extends Factory
+class travaux_ifeFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -28,9 +28,12 @@ class travaux_cadastreFactory extends Factory
             'situation_administrative' => $this->faker->text(),
             'rattachement' => $this->faker->text(),
             'id_user' => rand(1, 6),  // Create a new user if necessary
-            'croquis_de_levé' => $this->faker->text(),
+            'croquis' => $this->faker->text(),
             'vidage' => $this->faker->text(),
             'image' => $this->faker->imageUrl(),
+            'cin' => $this->faker->text(),
+            'riverain' => $this->faker->text(),
+            'Centroïde' => $this->faker->word(),
         ];
     }
 }

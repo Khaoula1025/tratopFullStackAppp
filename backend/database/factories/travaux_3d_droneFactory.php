@@ -2,24 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Http\Controllers\travauxCadastreController;
-use App\Models\travaux_cadastre;
-use App\Models\TravauxCadastre;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TravauxCadastre>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\travaux_3d_drone>
  */
-class TravauxCadastreFactory extends Factory
+class travaux_3d_droneFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = travaux_cadastre::class;
-
     /**
      * Define the model's default state.
      *
@@ -34,13 +24,14 @@ class TravauxCadastreFactory extends Factory
             'titre_foncier' => $this->faker->word(),
             'Equipe_de_terrain' => $this->faker->name(),
             'materiel' => $this->faker->word(),
-            'observation' => $this->faker->text(),
+            'observation' => $this->faker->optional()->text(),
             'situation_administrative' => $this->faker->text(),
             'rattachement' => $this->faker->text(),
-            'id_user' => User::factory(), // Create a new user if necessary
-            'croquis_de_levé' => $this->faker->text(),
-            'vidage' => $this->faker->text(),
-            'image' => $this->faker->imageUrl(),
+            'gcp' => $this->faker->text(),
+            'log' => $this->faker->text(),
+            'photos' => $this->faker->text(),
+            'statique' => $this->faker->text(),
+            'id_user' => rand(1, 6),
         ];
     }
 }
